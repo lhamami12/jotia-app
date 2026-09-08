@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "جوطية",
+    "slug": "jotia-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "jotia",
+    "splash": {
+      "backgroundColor": "#1E3A45"
+    },
+    "android": {
+      "package": "com.jotia.app",
+"googleServicesFile": "./google-services.json",
+      "adaptiveIcon": {
+        "backgroundColor": "#1E3A45"
+      },
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "ios": {
+      "bundleIdentifier": "com.jotia.app",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "خاصنا الوصول للصور باش تقدر تزيد صورة السلعة فالإعلان ديالك.",
+        "NSCameraUsageDescription": "خاصنا الوصول للكاميرا باش تقدر تدير صورة مباشرة للسلعة."
+      }
+    },
+    "plugins": [
+"@react-native-firebase/app",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "خاصنا الوصول للصور باش تقدر تزيد صورة السلعة."
+        }
+      ],
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6c08c313-52d8-4c88-8192-2a2384cbe61c"
+      }
+    }
+  }
+}

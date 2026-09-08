@@ -1,0 +1,13 @@
+{
+  "name": "jotia-functions",
+  "description": "Cloud Functions ديال جوطية - إشعارات الشات",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "private": true
+}
