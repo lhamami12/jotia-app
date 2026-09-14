@@ -2,13 +2,15 @@ import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { colors } from '../theme/theme';
 import { regions } from '../data/regions';
+import { useTranslation } from 'react-i18next';
 
 export default function RegionScreen({ navigation }) {
+  const { t } = useTranslation();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.title}>جوطية</Text>
-        <Text style={styles.subtitle}>سوق الجوطية الرقمي لكل المغرب. اختر جهتك باش نوروك اللي قريب منك.</Text>
+        <Text style={styles.title}>{t('regionScreen.title')}</Text>
+        <Text style={styles.subtitle}>{t('regionScreen.subtitle')}</Text>
       </View>
       <FlatList
         data={regions}
@@ -19,8 +21,8 @@ export default function RegionScreen({ navigation }) {
             style={styles.regionItem}
             onPress={() => navigation.navigate('City', { region: item })}
           >
-            <Text style={styles.regionName}>{item.name}</Text>
-            <Text style={styles.regionCount}>{item.cities.length} مدن ›</Text>
+            <Text style={styles.regionName}>{t('regions.' + item.name, item.name)}</Text>
+            <Text style={styles.regionCount}>{t('regionScreen.citiesCount', { count: item.cities.length })}</Text>
           </TouchableOpacity>
         )}
       />

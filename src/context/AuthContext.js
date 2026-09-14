@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import { registerForPushNotifications } from '../services/notifications';
+import { getUserProfile } from '../services/users';
+import { Alert } from 'react-native';
 
 const AuthContext = createContext({ user: null, loading: true, logout: () => {} });
 
@@ -16,6 +18,12 @@ export function AuthProvider({ children }) {
       if (firebaseUser) {
         // ملء خدي المستخدم الجديد بأرقام تسجيل إشعاراته
         registerForPushNotifications(firebaseUser.uid).catch(() => {});
+          getUserProfile(firebaseUser.uid).then((profile) => {
+            if (profile?.isBlocked) {
+              Alert.alert('حساب موقف', 'تم توقيف حسابك. تواصل معنا للمزيد من المعلومات.');
+              auth().signOut();
+            }
+          }).catch(() => {});
       }
     });
     return unsubscribe;

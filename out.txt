@@ -1,0 +1,210 @@
+     1	import React, { useState, useEffect } from 'react';
+     2	import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, Alert, ScrollView } from 'react-native';
+     3	import { useNavigation } from '@react-navigation/native';
+     4	import { colors } from '../theme/theme';
+     5	import { useAuth } from '../context/AuthContext';
+     6	import { getUserProfile, updateUserDisplayName } from '../services/users';
+     7	import { subscribeToMyListings } from '../services/listings';
+     8	import { subscribeToFavoriteIds } from '../services/favorites';
+     9	
+    10	const APP_VERSION = '1.0.0';
+    11	
+    12	export default function ProfileScreen() {
+    13	  const { user, logout } = useAuth();
+    14	  const navigation = useNavigation();
+    15	
+    16	  const [displayName, setDisplayName] = useState('');
+    17	  const [editing, setEditing] = useState(false);
+    18	  const [nameInput, setNameInput] = useState('');
+    19	  const [saving, setSaving] = useState(false);
+    20	  const [listingsCount, setListingsCount] = useState(0);
+    21	  const [favoritesCount, setFavoritesCount] = useState(0);
+    22	  const [isAdmin, setIsAdmin] = useState(false);
+    23	
+    24	  useEffect(() => {
+    25	    if (!user) return;
+    26	    getUserProfile(user.uid).then((profile) => {
+    27	      const name = profile?.displayName || user.displayName || '';
+    28	      setDisplayName(name);
+    29	      setNameInput(name);
+    30	      setIsAdmin(profile?.isAdmin === true);
+    31	    });
+    32	  }, [user]);
+    33	
+    34	  useEffect(() => {
+    35	    if (!user) return;
+    36	    const unsub = subscribeToMyListings(user.uid, (items) => setListingsCount(items.length));
+    37	    return unsub;
+    38	  }, [user]);
+    39	
+    40	  useEffect(() => {
+    41	    if (!user) return;
+    42	    const unsub = subscribeToFavoriteIds(user.uid, (ids) => setFavoritesCount(ids.length));
+    43	    return unsub;
+    44	  }, [user]);
+    45	
+    46	  const saveName = async () => {
+    47	    if (!nameInput.trim()) {
+    48	      Alert.alert('ناقص', 'دخل الاسم لي بغيتي');
+    49	      return;
+    50	    }
+    51	    setSaving(true);
+    52	    try {
+    53	      await updateUserDisplayName(user.uid, nameInput.trim());
+    54	      setDisplayName(nameInput.trim());
+    55	      setEditing(false);
+    56	    } catch (error) {
+    57	      Alert.alert('خطأ', 'ماقدرناش نحفظو الاسم.\n' + error.message);
+    58	    } finally {
+    59	      setSaving(false);
+    60	    }
+    61	  };
+    62	
+    63	  if (!user) {
+    64	    return (
+    65	      <SafeAreaView style={styles.container}>
+    66	        <Text style={styles.sectionTitle}>حسابي</Text>
+    67	        <View style={styles.center}>
+    68	          <View style={styles.avatar}><Text style={{ fontSize: 28 }}>👤</Text></View>
+    69	          <Text style={styles.guestName}>زائر جوطية</Text>
+    70	          <Text style={styles.guestSub}>سجل الدخول باش تنشر وتتواصل مع البائعين</Text>
+    71	          <TouchableOpacity style={styles.loginBtn} onPress={() => navigation.getParent()?.navigate('Login')}>
+    72	            <Text style={styles.loginBtnText}>تسجيل الدخول</Text>
+    73	          </TouchableOpacity>
+    74	        </View>
+    75	      </SafeAreaView>
+    76	    );
+    77	  }
+    78	
+    79	  return (
+    80	    <SafeAreaView style={styles.container}>
+    81	      <Text style={styles.sectionTitle}>حسابي</Text>
+    82	      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 60 }}>
+    83	        <View style={styles.userCard}>
+    84	          <View style={[styles.avatar, { backgroundColor: colors.mustard }]}>
+    85	            <Text style={{ fontSize: 20, color: colors.paper, fontWeight: '900' }}>
+    86	              {(displayName || user.phoneNumber || '?').slice(0, 1)}
+    87	            </Text>
+    88	          </View>
+    89	          <View style={{ flex: 1 }}>
+    90	            {editing ? (
+    91	              <View style={styles.editRow}>
+    92	                <TextInput
+    93	                  style={styles.nameInput}
+    94	                  value={nameInput}
+    95	                  onChangeText={setNameInput}
+    96	                  placeholder="سميتك..."
+    97	                  placeholderTextColor={colors.muted}
+    98	                  textAlign="right"
+    99	                  autoFocus
+   100	                />
+   101	                <TouchableOpacity onPress={saveName} disabled={saving} style={styles.saveNameBtn}>
+   102	                  <Text style={styles.saveNameBtnText}>{saving ? '...' : '✓ حفظ'}</Text>
+   103	                </TouchableOpacity>
+   104	              </View>
+   105	            ) : (
+   106	              <TouchableOpacity onPress={() => setEditing(true)}>
+   107	                <Text style={styles.phoneText}>{displayName || 'زيد سميتك ✏️'}</Text>
+   108	              </TouchableOpacity>
+   109	            )}
+   110	            <Text style={styles.newBadge}>{user.phoneNumber || user.email || 'جديد فالمنصة'}</Text>
+   111	          </View>
+   112	        </View>
+   113	
+   114	        <TouchableOpacity style={styles.card} onPress={() => navigation.getParent()?.navigate('MyListings')}>
+   115	          <Text style={styles.chevron}>‹</Text>
+   116	          <View style={styles.cardContent}>
+   117	            <Text style={styles.cardTitle}>📦 إعلاناتي ({listingsCount})</Text>
+   118	            <Text style={styles.cardSub}>{listingsCount === 0  ? 'ماعندكش إعلانات منشورة حاليا' : `عندك ${listingsCount} إعلان منشور`}</Text>
+   119	          </View>
+   120	        </TouchableOpacity>
+   121	
+   122	        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Favorites')}>
+   123	          <Text style={styles.chevron}>‹</Text>
+   124	          <View style={styles.cardContent}>
+   125	            <Text style={styles.cardTitle}>❤️ المفضلة ({favoritesCount})</Text>
+   126	          </View>
+   127	        </TouchableOpacity>
+   128	
+   129	        <Text style={styles.groupLabel}>الإعدادات</Text>
+   130	
+   131	        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Settings')}>
+   132	          <Text style={styles.chevron}>‹</Text>
+   133	          <View style={styles.cardContent}>
+   134	            <Text style={styles.cardTitle}>⚙️ الإعدادات</Text>
+   135	          </View>
+   136	        </TouchableOpacity>
+   137	
+   138	        <TouchableOpacity style={styles.card} onPress={() => Alert.alert('اللغة', 'العربية / Français — قريبا')}>
+   139	          <Text style={styles.chevron}>‹</Text>
+   140	          <View style={styles.cardContent}>
+   141	            <Text style={styles.cardTitle}>🌐 اللغة</Text>
+   142	            <Text style={styles.cardSub}>العربية</Text>
+   143	          </View>
+   144	        </TouchableOpacity>
+   145	
+   146	        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('About')}>
+   147	          <Text style={styles.chevron}>‹</Text>
+   148	          <View style={styles.cardContent}>
+   149	            <Text style={styles.cardTitle}>ℹ️ من نحن</Text>
+   150	          </View>
+   151	        </TouchableOpacity>
+   152	
+   153	        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Contact')}>
+   154	          <Text style={styles.chevron}>‹</Text>
+   155	          <View style={styles.cardContent}>
+   156	            <Text style={styles.cardTitle}>✉️ تواصل معنا</Text>
+   157	          </View>
+   158	        </TouchableOpacity>
+   159	      {isAdmin && (
+   160	        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AdminReports')}>
+   161	          <Text style={styles.chevron}>‹</Text>
+   162	          <View style={styles.cardContent}>
+   163	            <Text style={styles.cardTitle}>🛡️ لوحة الأدمين</Text>
+   164	          </View>
+   165	        </TouchableOpacity>
+   166	      )}
+   167	
+   168	        <TouchableOpacity style={styles.card} onPress={logout}>
+   169	          <View style={styles.cardContent}>
+   170	            <Text style={[styles.cardTitle, { color: colors.marker }]}> 🚪 تسجيل الخروج</Text>
+   171	          </View>
+   172	        </TouchableOpacity>
+   173	
+   174	        <Text style={styles.versionText}>جوطية v{APP_VERSION}</Text>
+   175	      </ScrollView>
+   176	    </SafeAreaView>
+   177	  );
+   178	}
+   179	
+   180	const styles = StyleSheet.create({
+   181	  container: { flex: 1, backgroundColor: colors.tarp },
+   182	  sectionTitle: {
+   183	    color: colors.mustard,
+   184	    fontSize: 18,
+   185	    fontWeight: '900',
+   186	    paddingHorizontal: 20,
+   187	    paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 12 : 20,
+   188	    paddingBottom: 4,
+   189	  },
+   190	  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8, padding: 40 },
+   191	  avatar: { width: 70, height: 70, borderRadius: 35, backgroundColor: colors.kraft, alignItems: 'center', justifyContent: 'center' },
+   192	  guestName: { color: colors.paper, fontWeight: '900', fontSize: 17 },
+   193	  guestSub: { color: colors.paper, fontSize: 13, opacity: 0.7, textAlign: 'center' },
+   194	  loginBtn: { backgroundColor: colors.marker, paddingHorizontal: 28, paddingVertical: 12, borderRadius: 12, marginTop: 10 },
+   195	  loginBtnText: { color: colors.paper, fontWeight: '700' },
+   196	  userCard: { flexDirection: 'row-reverse', alignItems: 'center', gap: 14, backgroundColor: colors.kraft, borderRadius: 16, padding: 16 },
+   197	  phoneText: { fontWeight: '900', fontSize: 16, color: colors.ink, textAlign: 'right' },
+   198	  newBadge: { fontSize: 11.5, color: colors.muted, textAlign: 'right', marginTop: 2 },
+   199	  editRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
+   200	  nameInput: { flex: 1, backgroundColor: colors.paper, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 6, fontSize: 14, color: colors.ink },
+   201	  saveNameBtn: { backgroundColor: colors.marker, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 10 },
+   202	  saveNameBtnText: { color: colors.paper, fontWeight: '700', fontSize: 12 },
+   203	  groupLabel: { color: colors.paper, opacity: 0.6, fontSize: 12.5, fontWeight: '700', marginTop: 20, marginBottom: 6, textAlign: 'right' },
+   204	  card: { flexDirection: 'row-reverse', alignItems: 'center', backgroundColor: colors.paper, borderRadius: 16, padding: 14, marginTop: 12 },
+   205	  cardContent: { flex: 1 },
+   206	  cardTitle: { fontWeight: '700', fontSize: 13.5, color: colors.ink, textAlign: 'right' },
+   207	  cardSub: { fontSize: 11.5, color: colors.muted, textAlign: 'right', marginTop: 2 },
+   208	  chevron: { fontSize: 18, color: colors.muted, marginLeft: 8 },
+   209	  versionText: { textAlign: 'center', color: colors.paper, opacity: 0.4, fontSize: 11, marginTop: 24, marginBottom: 12 },
+   210	});

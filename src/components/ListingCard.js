@@ -24,7 +24,7 @@ export default function ListingCard({ item, onPress, onToggleFav, isFav }) {
       </View>
       <View style={styles.body}>
         <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
-        <Text style={styles.loc}>📍 {item.loc}</Text>
+        <Text style={styles.loc}>📍 {item.city}</Text>
         <View style={styles.bottomRow}>
           <Text style={styles.price}>{item.price}</Text>
           <View style={[styles.badge, { backgroundColor: badge.bg }]}>
@@ -37,9 +37,9 @@ export default function ListingCard({ item, onPress, onToggleFav, isFav }) {
 }
 
 const styles = StyleSheet.create({
-  card: { flexDirection: 'row', backgroundColor: colors.paper, borderRadius: 16, overflow: 'hidden', marginBottom: 14, elevation: 3 },
-  imageBox: { width: 110, backgroundColor: '#cbb98c', alignItems: 'center', justifyContent: 'center' },
-  image: { width: '100%', height: '100%' },
+  card: { flexDirection: 'row', backgroundColor: colors.paper, borderRadius: 16, overflow: 'hidden', marginBottom: 14, elevation: 3, height: 130 },
+  imageBox: { width: 110, height: 130, backgroundColor: '#cbb98c', alignItems: 'center', justifyContent: 'center' },
+  image: { width: '100%', height: '100%', resizeMode: 'cover' },
   favBtn: { position: 'absolute', top: 6, left: 6, width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(0,0,0,.35)', alignItems: 'center', justifyContent: 'center' },
   favBtnOn: { backgroundColor: 'rgba(193,59,47,.85)' },
   body: { flex: 1, padding: 12, justifyContent: 'space-between' },

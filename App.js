@@ -1,16 +1,28 @@
-import React from 'react';
+import './src/i18n';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import RegionScreen from './src/screens/RegionScreen';
 import CityScreen from './src/screens/CityScreen';
 import MainTabs from './src/navigation/MainTabs';
+import SettingsScreen from './src/screens/SettingsScreen';
+import PrivacyScreen from './src/screens/PrivacyScreen';
 import ListingDetailScreen from './src/screens/ListingDetailScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import VerifyScreen from './src/screens/VerifyScreen';
 import ChatScreen from './src/screens/ChatScreen';
+import AboutScreen from './src/screens/AboutScreen';
+import ContactScreen from './src/screens/ContactScreen';
+import MyListingsScreen from './src/screens/MyListingsScreen';
+import EditListingScreen from './src/screens/EditListingScreen';
+import ReportListingScreen from './src/screens/ReportListingScreen';
+import AdminReportsScreen from './src/screens/AdminReportsScreen';
+import FavoritesScreen from './src/screens/FavoritesScreen';
 import { AuthProvider } from './src/context/AuthContext';
+import { colors } from './src/theme/theme';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,22 +50,49 @@ class ErrorBoundary extends React.Component {
 }
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const [savedCity, setSavedCity] = useState(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem('selectedCity').then((city) => {
+      setSavedCity(city);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return <View style={{ flex: 1, backgroundColor: colors.tarp }} />;
+  }
+
   return (
     <ErrorBoundary>
       <AuthProvider>
         <NavigationContainer>
           <StatusBar style="light" />
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Navigator
+            screenOptions={{ headerShown: false }}
+            initialRouteName={savedCity ? 'MainTabs' : 'Region'}
+          >
             <Stack.Screen name="Region" component={RegionScreen} />
             <Stack.Screen name="City" component={CityScreen} />
-            <Stack.Screen name="MainTabs" component={MainTabs} />
+            <Stack.Screen name="MainTabs" component={MainTabs} initialParams={{ city: savedCity }} />
             <Stack.Screen name="ListingDetail" component={ListingDetailScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Verify" component={VerifyScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Chat" component={ChatScreen} options={{ presentation: 'modal' }} />
-          </Stack.Navigator>
+            <Stack.Screen name="About" component={AboutScreen} options={{ presentation: 'modal' }} />
+            <Stack.Screen name="Contact" component={ContactScreen} options={{ presentation: 'modal' }} />
+<Stack.Screen name="MyListings" component={MyListingsScreen} options={{ presentation: 'modal' }} />
+<Stack.Screen name="EditListing" component={EditListingScreen} options={{ presentation: 'modal' }} />          
+<Stack.Screen name="ReportListing" component={ReportListingScreen} options={{ presentation: 'modal' }} />
+            <Stack.Screen name="AdminReports" component={AdminReportsScreen} options={{ presentation: 'modal' }} />
+            <Stack.Screen name="Favorites" component={FavoritesScreen} options={{ presentation: 'modal' }} />
+            <Stack.Screen name="Settings" component={SettingsScreen} options={{ presentation: 'modal' }} />
+            <Stack.Screen name="Privacy" component={PrivacyScreen} options={{ presentation: 'modal' }} />
+</Stack.Navigator>
         </NavigationContainer>
       </AuthProvider>
     </ErrorBoundary>
   );
 }
+

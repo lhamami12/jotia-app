@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
 import { colors } from '../theme/theme';
+import { useTranslation } from 'react-i18next';
 
 export default function VerifyScreen({ route, navigation }) {
   const { confirmation, phone } = route.params;
   const [code, setCode] = useState('');
   const [checking, setChecking] = useState(false);
+  const { t } = useTranslation();
 
   const confirmCode = async () => {
     if (!code.trim()) {
-      Alert.alert('خاصك الكود', 'دخل الكود اللي وصلك بالـ SMS');
+      Alert.alert(t('verify.alertTitle'), t('verify.alertMsg'));
       return;
     }
     setChecking(true);
@@ -20,15 +22,15 @@ export default function VerifyScreen({ route, navigation }) {
       navigation.navigate('MainTabs');
     } catch (error) {
       setChecking(false);
-      Alert.alert('الكود غير صحيح', 'تأكد من الكود وحاول مرة أخرى.');
+      Alert.alert(t('verify.errorTitle'), t('verify.errorMsg'));
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.form}>
-        <Text style={styles.header}>أدخل كود التأكيد</Text>
-        <Text style={styles.sub}>صيفطنا كود ديال 6 أرقام لـ {phone}</Text>
+        <Text style={styles.header}>{t('verify.header')}</Text>
+        <Text style={styles.sub}>{t('verify.sub', { phone })}</Text>
         <TextInput
           style={styles.input}
           value={code}
@@ -40,7 +42,7 @@ export default function VerifyScreen({ route, navigation }) {
           maxLength={6}
         />
         <TouchableOpacity style={styles.submitBtn} onPress={confirmCode} disabled={checking}>
-          <Text style={styles.submitText}>{checking ? 'كنتأكدو...' : 'تأكيد ✓'}</Text>
+          <Text style={styles.submitText}>{checking ? t('verify.checking') : t('verify.confirm')}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

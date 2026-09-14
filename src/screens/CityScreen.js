@@ -1,29 +1,38 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../theme/theme';
+import { useTranslation } from 'react-i18next';
 
 export default function CityScreen({ route, navigation }) {
   const { region } = route.params;
+  const { t } = useTranslation();
+
+  const selectCity = async (city) => {
+    await AsyncStorage.setItem('selectedCity', city);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainTabs', params: { city } }],
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backRow} onPress={() => navigation.goBack()}>
-        <Text style={styles.backText}>→ رجوع للجهات</Text>
+        <Text style={styles.backText}>{t('cityScreen.back')}</Text>
       </TouchableOpacity>
       <View style={styles.hero}>
-        <Text style={styles.title}>{region.name}</Text>
-        <Text style={styles.subtitle}>اختر المدينة باش تشوف الإعلانات والجواطي اللي فيها</Text>
+        <Text style={styles.title}>{t('regions.' + region.name, region.name)}</Text>
+        <Text style={styles.subtitle}>{t('cityScreen.subtitle')}</Text>
       </View>
       <FlatList
         data={region.cities}
         keyExtractor={(item) => item}
         contentContainerStyle={{ padding: 20 }}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.cityItem}
-            onPress={() => navigation.navigate('MainTabs', { city: item })}
-          >
-            <Text style={styles.cityName}>{item}</Text>
-            <Text style={styles.cityGo}>دخول ›</Text>
+          <TouchableOpacity style={styles.cityItem} onPress={() => selectCity(item)}>
+            <Text style={styles.cityName}>{t('cities.' + item, item)}</Text>
+            <Text style={styles.cityGo}>{t('cityScreen.enter')}</Text>
           </TouchableOpacity>
         )}
       />

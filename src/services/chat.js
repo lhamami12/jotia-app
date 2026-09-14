@@ -4,14 +4,14 @@ import {
   query, where, orderBy, onSnapshot, serverTimestamp, updateDoc,
 } from 'firebase/firestore';
 import { db } from './firebase';
-
+import { Alert } from 'react-native';
 // معرّف ثابت للمحادثة: نفس الإعلان + نفس المشتري = نفس المحادثة ديما (ماكيتكررش)
 function buildConversationId(listingId, buyerId) {
   return `${listingId}_${buyerId}`;
 }
 
 // كنجيبو المحادثة إيلا كاينة، وإلا كنخلقو وحدة جديدة
-export async function getOrCreateConversation({ listingId, listingTitle, listingEmoji, sellerId, sellerPhone, buyerId, buyerPhone }) {
+export async function getOrCreateConversation({ listingId, listingTitle, listingEmoji, sellerId, sellerPhone, sellerName, buyerId, buyerPhone, buyerName }) {
   const conversationId = buildConversationId(listingId, buyerId);
   const ref = doc(db, 'conversations', conversationId);
   const snap = await getDoc(ref);
@@ -19,7 +19,8 @@ export async function getOrCreateConversation({ listingId, listingTitle, listing
   if (!snap.exists()) {
     await setDoc(ref, {
       listingId, listingTitle, listingEmoji,
-      sellerId, sellerPhone, buyerId, buyerPhone,
+      sellerId, sellerPhone, sellerName: sellerName || null,
+      buyerId, buyerPhone, buyerName: buyerName || null,
       participants: [sellerId, buyerId],
       lastMessage: '',
       lastMessageAt: serverTimestamp(),
@@ -38,9 +39,9 @@ export function subscribeToMessages(conversationId, callback) {
 }
 
 // صيفط رسالة (نص عادي أو عرض ثمن 💰 أو نقطة لقاء 🛡️)
-export async function sendMessage(conversationId, senderId, text) {
+export async function sendMessage(conversationId, senderId, text, senderName) {
   const messagesRef = collection(db, 'conversations', conversationId, 'messages');
-  await addDoc(messagesRef, { senderId, text, createdAt: serverTimestamp() });
+  await addDoc(messagesRef, { senderId, text, senderName: senderName || null, createdAt: serverTimestamp() });
   await updateDoc(doc(db, 'conversations', conversationId), {
     lastMessage: text,
     lastMessageAt: serverTimestamp(),

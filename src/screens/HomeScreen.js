@@ -3,17 +3,24 @@ import { View, Text, FlatList, TouchableOpacity, TextInput, StyleSheet, SafeArea
 import { colors } from '../theme/theme';
 import { categories } from '../data/regions';
 import ListingCard from '../components/ListingCard';
-import { subscribeToListings } from '../services/listings';
+import { subscribeToListings, subscribeToAllListings } from '../services/listings';
+import { toggleFavorite, subscribeToFavoriteIds } from '../services/favorites';
+import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 export default function HomeScreen({ route, navigation }) {
   const city = route.params?.city || '--';
+  const { t } = useTranslation();
   const [activeCat, setActiveCat] = useState('الكل');
   const [search, setSearch] = useState('');
-  const [favorites, setFavorites] = useState({});
+  const { user } = useAuth();
+  const [favoriteIds, setFavoriteIds] = useState([]);
   const [listings, setListings] = useState([]);
+  const [allListings, setAllListings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchStarted, setSearchStarted] = useState(false);
 
-  // كنتنصتو على Firestore فالوقت الحقيقي — كل مرة كيتزاد أو يتبدل إعلان، الفيد كيتحدث بروحو
+  // القائمة العادية المفلترة بالمدينة والفئة
   useEffect(() => {
     setLoading(true);
     const unsubscribe = subscribeToListings(city, activeCat, (items) => {
@@ -23,24 +30,55 @@ export default function HomeScreen({ route, navigation }) {
     return unsubscribe;
   }, [city, activeCat]);
 
-  const filtered = search.trim()
-    ? listings.filter((l) => l.title.includes(search.trim()))
+  // كنبداو البحث الشامل غير أول مرة يكتب المستخدم شي حاجة (باش ما نزيدوش قراءات بلا داعي)
+  useEffect(() => {
+    if (search.trim() && !searchStarted) {
+      setSearchStarted(true);
+    }
+  }, [search]);
+
+  useEffect(() => {
+    if (!searchStarted) return;
+    const unsubscribe = subscribeToAllListings((items) => {
+      setAllListings(items);
+    });
+    return unsubscribe;
+  }, [searchStarted]);
+
+  const searchTerm = search.trim().toLowerCase();
+  const isSearching = searchTerm.length > 0;
+
+  const filtered = isSearching
+    ? allListings.filter((l) => {
+        const haystack = `${l.title || ''} ${l.desc || ''} ${l.cat || ''} ${l.city || ''}`.toLowerCase();
+        return haystack.includes(searchTerm);
+      })
     : listings;
 
-  const toggleFav = (id) => setFavorites(prev => ({ ...prev, [id]: !prev[id] }));
+  const toggleFav = async (id) => {
+    if (!user) return;
+    const isFav = favoriteIds.includes(id);
+    try {
+      await toggleFavorite(user.uid, id, isFav);
+    } catch (error) {
+      console.log('خطأ فالمفضلة:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    const unsub = subscribeToFavoriteIds(user?.uid, (ids) => setFavoriteIds(ids));
+    return unsub;
+  }, [user]);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.topRow}>
-          <Text style={styles.brand}>جوطية</Text>
-          <TouchableOpacity style={styles.locPill} onPress={() => navigation.getParent()?.navigate('Region')}>
-            <Text style={styles.locPillText}>📍 {city} ↻</Text>
-          </TouchableOpacity>
+          <Text style={styles.brand}>{t('home.brand')}</Text>
         </View>
         <TextInput
           style={styles.search}
-          placeholder="قلّب على شي حاجة..."
+          placeholder={t('home.searchPlaceholder')}
           placeholderTextColor={colors.muted}
           value={search}
           onChangeText={setSearch}
@@ -48,35 +86,47 @@ export default function HomeScreen({ route, navigation }) {
         />
       </View>
 
-      <FlatList
-        horizontal
-        data={categories}
-        keyExtractor={(c) => c}
-        style={{ flexGrow: 0, marginTop: 12 }}
-        contentContainerStyle={{ paddingHorizontal: 20, gap: 10 }}
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[styles.chip, activeCat === item && styles.chipActive]}
-            onPress={() => setActiveCat(item)}
-          >
-            <Text style={[styles.chipText, activeCat === item && styles.chipTextActive]}>{item}</Text>
-          </TouchableOpacity>
-        )}
-      />
+      {!isSearching && (
+        <FlatList
+          horizontal
+          data={categories}
+          keyExtractor={(c) => c}
+          style={{ flexGrow: 0, marginTop: 12 }}
+          contentContainerStyle={{ paddingHorizontal: 20, gap: 10 }}
+          showsHorizontalScrollIndicator={false}
+          ListHeaderComponent={() => (
+            <TouchableOpacity style={styles.locPill} onPress={() => navigation.getParent()?.navigate('Region')}>
+              <Text style={styles.locPillText}>📍 {city} ↻</Text>
+            </TouchableOpacity>
+          )}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[styles.chip, activeCat === item && styles.chipActive]}
+              onPress={() => setActiveCat(item)}
+            >
+              <Text style={[styles.chipText, activeCat === item && styles.chipTextActive]}>{t('categories.' + item, item)}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      )}
 
-      {loading ? (
+      {loading && !isSearching ? (
         <ActivityIndicator color={colors.mustard} style={{ marginTop: 40 }} />
       ) : (
         <FlatList
+          style={{ flex: 1 }}
           data={filtered}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ padding: 16, paddingBottom: 40 }}
-          ListEmptyComponent={<Text style={styles.empty}>ماكاينش إعلانات دابا فهاد المدينة، كن أول واحد ينشر 🚀</Text>}
+          ListEmptyComponent={
+            <Text style={styles.empty}>
+              {isSearching ? t('home.noResults', { term: search.trim() }) : t('home.emptyState')}
+            </Text>
+          }
           renderItem={({ item }) => (
             <ListingCard
               item={item}
-              isFav={!!favorites[item.id]}
+              isFav={favoriteIds.includes(item.id)}
               onToggleFav={() => toggleFav(item.id)}
               onPress={() => navigation.navigate('ListingDetail', { listing: item })}
             />

@@ -4,9 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from '../theme/theme';
 import { useAuth } from '../context/AuthContext';
 import { subscribeToMyConversations } from '../services/chat';
+import { useTranslation } from 'react-i18next';
 
 export default function MessagesScreen() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const [conversations, setConversations] = useState([]);
 
@@ -19,10 +21,10 @@ export default function MessagesScreen() {
   if (!user) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.sectionTitle}>المحادثات</Text>
+        <Text style={styles.sectionTitle}>{t('messages.title')}</Text>
         <View style={styles.center}>
           <Text style={styles.emIcon}>🔒</Text>
-          <Text style={styles.centerText}>سجل الدخول باش تشوف المحادثات ديالك</Text>
+          <Text style={styles.centerText}>{t('messages.loginNeeded')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -30,7 +32,7 @@ export default function MessagesScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.sectionTitle}>المحادثات</Text>
+      <Text style={styles.sectionTitle}>{t('messages.title')}</Text>
       <FlatList
         data={conversations}
         keyExtractor={(c) => c.id}
@@ -38,8 +40,8 @@ export default function MessagesScreen() {
         ListEmptyComponent={
           <View style={styles.center}>
             <Text style={styles.emIcon}>📭</Text>
-            <Text style={styles.centerText}>ماعندكش رسائل دابا</Text>
-            <Text style={styles.centerSub}>ابدأ محادثة من أي إعلان يعجبك</Text>
+            <Text style={styles.centerText}>{t('messages.emptyTitle')}</Text>
+            <Text style={styles.centerSub}>{t('messages.emptySub')}</Text>
           </View>
         }
         renderItem={({ item }) => {
@@ -56,7 +58,7 @@ export default function MessagesScreen() {
               <View style={styles.avatar}><Text>{item.listingEmoji || '📦'}</Text></View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.title}>{item.listingTitle}</Text>
-                <Text style={styles.lastMsg} numberOfLines={1}>{item.lastMessage || 'ابدا المحادثة...'}</Text>
+                <Text style={styles.lastMsg} numberOfLines={1}>{item.lastMessage || t('messages.startChat')}</Text>
               </View>
             </TouchableOpacity>
           );

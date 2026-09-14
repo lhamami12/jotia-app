@@ -3,16 +3,19 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, SafeArea
 import { colors } from '../theme/theme';
 import { useAuth } from '../context/AuthContext';
 import { subscribeToMessages, sendMessage } from '../services/chat';
+import { useTranslation } from 'react-i18next';
 
-const safeSpots = [
-  { icon: '☕', name: 'قهوة قريبة من الجوطية', sub: 'مكان عمومي مزيان، فيه ناس بزاف' },
-  { icon: '🏬', name: 'مدخل المول الكبير', sub: 'مراقب بالكاميرات، بلاصة معروفة' },
-  { icon: '🚓', name: 'قدام المفوضية', sub: 'أضمن بلاصة لتبادل السلع الغالية' },
-];
+
 
 export default function ChatScreen({ route, navigation }) {
-  const { conversationId, otherPhone, listing } = route.params;
+  const { conversationId, otherPhone, otherName, listing } = route.params;
   const { user } = useAuth();
+  const { t } = useTranslation();
+  const safeSpots = [
+    { icon: '☕', name: t('chat.spot1Name'), sub: t('chat.spot1Sub') },
+    { icon: '🏬', name: t('chat.spot2Name'), sub: t('chat.spot2Sub') },
+    { icon: '🚓', name: t('chat.spot3Name'), sub: t('chat.spot3Sub') },
+  ];
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [showSpots, setShowSpots] = useState(false);
@@ -27,7 +30,8 @@ export default function ChatScreen({ route, navigation }) {
     const value = (content ?? text).trim();
     if (!value) return;
     setText('');
-    await sendMessage(conversationId, user.uid, value);
+    const myName = user.displayName || null;
+    await sendMessage(conversationId, user.uid, value, myName);
   };
 
   const basePrice = listing?.price ? parseInt(listing.price) : NaN;
@@ -37,7 +41,7 @@ export default function ChatScreen({ route, navigation }) {
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}><Text style={styles.headerBack}>→</Text></TouchableOpacity>
         <View style={styles.avatar}><Text>👤</Text></View>
-        <Text style={styles.headerName}>{otherPhone || 'المستخدم'}</Text>
+        <Text style={styles.headerName}>{otherName || otherPhone || t('chat.defaultUserName')}</Text>
       </View>
 
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -47,18 +51,28 @@ export default function ChatScreen({ route, navigation }) {
           keyExtractor={(m) => m.id}
           contentContainerStyle={{ padding: 16, gap: 8 }}
           onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
-          renderItem={({ item }) => (
-            <View style={[styles.bubble, item.senderId === user.uid ? styles.bubbleMe : styles.bubbleThem]}>
-              <Text style={item.senderId === user.uid ? styles.bubbleTextMe : styles.bubbleTextThem}>{item.text}</Text>
-            </View>
-          )}
+          renderItem={({ item }) => {
+            const isMe = item.senderId === user.uid;
+            return (
+              <View style={{ alignItems: isMe ? 'flex-end' : 'flex-start' }}>
+                {!!item.senderName && (
+                  <Text style={[styles.senderLabel, isMe ? styles.senderLabelMe : styles.senderLabelThem]}>
+                    {item.senderName}
+                  </Text>
+                )}
+                <View style={[styles.bubble, isMe ? styles.bubbleMe : styles.bubbleThem]}>
+                  <Text style={isMe ? styles.bubbleTextMe : styles.bubbleTextThem}>{item.text}</Text>
+                </View>
+              </View>
+            );
+          }}
         />
 
         {showSpots && (
           <View style={styles.spotsPanel}>
-            <Text style={styles.spotsTitle}>🛡️ اختر نقطة لقاء آمنة</Text>
+            <Text style={styles.spotsTitle}>{t('chat.meetingSpotsTitle')}</Text>
             {safeSpots.map((s) => (
-              <TouchableOpacity key={s.name} style={styles.spotItem} onPress={() => { send(`🛡️ اقترحت نلتقاو فـ: ${s.name}`); setShowSpots(false); }}>
+              <TouchableOpacity key={s.name} style={styles.spotItem} onPress={() => { send(t('chat.suggestSpotMsg', { name: s.name })); setShowSpots(false); }}>
                 <Text style={{ fontSize: 18 }}>{s.icon}</Text>
                 <View>
                   <Text style={styles.spotName}>{s.name}</Text>
@@ -71,14 +85,14 @@ export default function ChatScreen({ route, navigation }) {
 
         <View style={styles.quickRow}>
           <TouchableOpacity style={styles.safeBtn} onPress={() => setShowSpots(!showSpots)}>
-            <Text style={styles.safeBtnText}>🛡️ نقطة اللقاء</Text>
+            <Text style={styles.safeBtnText}>{t('chat.safeSpotBtn')}</Text>
           </TouchableOpacity>
           {!isNaN(basePrice) && (
             <>
-              <TouchableOpacity style={styles.offerChip} onPress={() => send(`💰 عرضت ${Math.round(basePrice * 0.9)} DH`)}>
+              <TouchableOpacity style={styles.offerChip} onPress={() => send(t('chat.offerMsg', { amount: Math.round(basePrice * 0.9) }))}>
                 <Text style={styles.offerChipText}>-10%</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.offerChip} onPress={() => send(`💰 عرضت ${Math.round(basePrice * 0.8)} DH`)}>
+              <TouchableOpacity style={styles.offerChip} onPress={() => send(t('chat.offerMsg', { amount: Math.round(basePrice * 0.8) }))}>
                 <Text style={styles.offerChipText}>-20%</Text>
               </TouchableOpacity>
             </>
@@ -90,7 +104,7 @@ export default function ChatScreen({ route, navigation }) {
             style={styles.input}
             value={text}
             onChangeText={setText}
-            placeholder="اكتب رسالتك..."
+            placeholder={t('chat.inputPlaceholder')}
             placeholderTextColor={colors.muted}
             textAlign="right"
             onSubmitEditing={() => send()}
@@ -110,6 +124,9 @@ const styles = StyleSheet.create({
   headerBack: { color: colors.mustard, fontSize: 18, fontWeight: '700' },
   avatar: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.kraft, alignItems: 'center', justifyContent: 'center' },
   headerName: { color: colors.paper, fontWeight: '700', fontSize: 14 },
+  senderLabel: { fontSize: 10.5, marginBottom: 2, marginHorizontal: 4 },
+  senderLabelMe: { color: colors.mustard },
+  senderLabelThem: { color: colors.muted },
   bubble: { maxWidth: '75%', padding: 10, borderRadius: 16 },
   bubbleMe: { backgroundColor: colors.marker, alignSelf: 'flex-end', borderBottomRightRadius: 4 },
   bubbleThem: { backgroundColor: colors.kraft, alignSelf: 'flex-start', borderBottomLeftRadius: 4 },

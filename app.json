@@ -11,9 +11,10 @@
     },
     "android": {
       "package": "com.jotia.app",
-"googleServicesFile": "./google-services.json",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "backgroundColor": "#1E3A45"
+        "backgroundColor": "#1E3A45",
+        "foregroundImage": "./assets/icon.png"
       },
       "permissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -29,19 +30,29 @@
       }
     },
     "plugins": [
-"@react-native-firebase/app",
+      "@react-native-firebase/app",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#1E3A45"
+        }
+      ],
       [
         "expo-image-picker",
         {
           "photosPermission": "خاصنا الوصول للصور باش تقدر تزيد صورة السلعة."
         }
       ],
-      "expo-font"
+      "expo-font",
+      "@react-native-google-signin/google-signin",
+      "expo-localization"
     ],
     "extra": {
       "eas": {
         "projectId": "6c08c313-52d8-4c88-8192-2a2384cbe61c"
       }
-    }
+    },
+    "icon": "./assets/icon.png"
   }
 }
