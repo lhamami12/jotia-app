@@ -38,11 +38,13 @@ export default function PostAdScreen() {
   const [submitting, setSubmitting] = useState(false);
 
   const pickImages = async () => {
+    Alert.alert('DEBUG', 'pickImages called');
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
       Alert.alert(t('post.imagePermissionTitle'), t('post.imagePermissionMsg'));
       return;
     }
+    Alert.alert('DEBUG', 'permission granted: ' + permission.granted);
     const remaining = MAX_IMAGES - imageUris.length;
     if (remaining <= 0) {
       Alert.alert(t('post.maxImagesTitle'), t('post.maxImagesMsg', { max: MAX_IMAGES }));
