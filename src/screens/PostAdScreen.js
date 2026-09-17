@@ -50,13 +50,20 @@ export default function PostAdScreen() {
       Alert.alert(t('post.maxImagesTitle'), t('post.maxImagesMsg', { max: MAX_IMAGES }));
       return;
     }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+    let result;
+    try {
+      result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.6,
       allowsMultipleSelection: true,
       selectionLimit: remaining,
     });
-    Alert.alert('DEBUG', JSON.stringify(result).slice(0, 500)); if (!result.canceled) {
+    } catch (e) {
+      Alert.alert('DEBUG ERROR', e.message + String(e.stack).slice(0,300));
+      return;
+    }
+    Alert.alert('DEBUG', JSON.stringify(result).slice(0, 500));
+    if (!result.canceled) {
       const newUris = result.assets.map((a) => a.uri).slice(0, remaining);
       setImageUris((prev) => [...prev, ...newUris]);
     }
