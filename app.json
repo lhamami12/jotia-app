@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "scheme": "jotia",
+    "newArchEnabled": false,
     "splash": {
       "backgroundColor": "#1E3A45"
     },
