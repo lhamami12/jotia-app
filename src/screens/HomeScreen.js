@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native';
 import { colors } from '../theme/theme';
 import { categories } from '../data/regions';
 import ListingCard from '../components/ListingCard';
@@ -74,7 +74,7 @@ export default function HomeScreen({ route, navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.topRow}>
-          <Text style={styles.brand}>{t('home.brand')}</Text>
+          <Image source={require('../../assets/logo-header.png')} style={styles.brandLogo} resizeMode="contain" />
         </View>
         <TextInput
           style={styles.search}
@@ -140,6 +140,7 @@ export default function HomeScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
   header: { backgroundColor: colors.tarpDark, padding: 18 },
+  brandLogo: { width: 140, height: 44, alignSelf: 'flex-start' },
   topRow: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' },
   brand: { fontSize: 24, fontWeight: '900', color: colors.mustard },
   locPill: { backgroundColor: 'rgba(247,243,232,.12)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
