@@ -1,32 +1,32 @@
-// دوال التعامل مع الإعلانات المفضلة
-import { collection, doc, setDoc, deleteDoc, query, where, onSnapshot, serverTimestamp } from 'firebase/firestore';
+// Favorite listings functions
+import firestore from '@react-native-firebase/firestore';
 import { db } from './firebase';
 
 function favId(userId, listingId) {
   return `${userId}_${listingId}`;
 }
 
-// إضافة أو حذف إعلان من المفضلة
+// Add or remove a listing from favorites
 export async function toggleFavorite(userId, listingId, isCurrentlyFav) {
-  const ref = doc(db, 'favorites', favId(userId, listingId));
+  const ref = db.collection('favorites').doc(favId(userId, listingId));
   if (isCurrentlyFav) {
-    await deleteDoc(ref);
+    await ref.delete();
   } else {
-    await setDoc(ref, { userId, listingId, createdAt: serverTimestamp() });
+    await ref.set({ userId, listingId, createdAt: firestore.FieldValue.serverTimestamp() });
   }
 }
 
-// الاستماع الحي لمعرفات الإعلانات المفضلة ديال المستخدم
+// Live listener for the user's favorite listing ids
 export function subscribeToFavoriteIds(userId, callback) {
   if (!userId) {
     callback([]);
     return () => {};
   }
-  const q = query(collection(db, 'favorites'), where('userId', '==', userId));
-  return onSnapshot(q, (snapshot) => {
+  const q = db.collection('favorites').where('userId', '==', userId);
+  return q.onSnapshot((snapshot) => {
     callback(snapshot.docs.map((d) => d.data().listingId));
   }, (error) => {
-    console.log('خطأ فجلب المفضلة:', error.message);
+    console.log('Error fetching favorites:', error.message);
     callback([]);
   });
 }

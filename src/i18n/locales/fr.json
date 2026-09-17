@@ -60,7 +60,8 @@
     "nameEmptyTitle": "Manquant",
     "nameEmptyMessage": "Entrez le nom souhaité",
     "errorTitle": "Erreur",
-    "saveNameError": "Impossible d'enregistrer le nom."
+    "saveNameError": "Impossible d'enregistrer le nom.",
+    "adminUsers": "Gestion des utilisateurs"
   },
   "nav": {
     "home": "Accueil",
@@ -141,7 +142,11 @@
     "loginNeeded": "Connectez-vous pour voir vos messages",
     "emptyTitle": "Vous n'avez aucun message pour le moment",
     "emptySub": "Commencez une conversation depuis n'importe quelle annonce",
-    "startChat": "Démarrer la conversation..."
+    "startChat": "Démarrer la conversation...",
+    "deleteTitle": "Supprimer la conversation",
+    "deleteMsg": "Êtes-vous sûr de vouloir supprimer cette conversation ?",
+    "cancel": "Annuler",
+    "delete": "Supprimer"
   },
   "chat": {
     "defaultUserName": "Utilisateur",
@@ -399,5 +404,46 @@
     "dismissBtn": "✓ Ignorer",
     "viewBtn": "👁️ Voir l'annonce",
     "blockBtn": "🚫 Bloquer le compte"
+  },
+  "adminUsers": {
+    "header": "Gestion des utilisateurs",
+    "searchPlaceholder": "Numéro de téléphone ou email",
+    "searchBtn": "Rechercher",
+    "searching": "Recherche...",
+    "noResults": "Aucun résultat pour cette recherche",
+    "errorTitle": "Erreur",
+    "resultName": "Nom : {{name}}",
+    "resultPhone": "Téléphone : {{phone}}",
+    "resultEmail": "Email : {{email}}",
+    "statusBlocked": "🚫 Compte bloqué",
+    "statusActive": "✅ Compte actif",
+    "blockBtn": "Bloquer le compte",
+    "unblockBtn": "Réactiver le compte",
+    "blockConfirmTitle": "Bloquer le compte",
+    "blockConfirmMsg": "Êtes-vous sûr de vouloir bloquer ce compte ?",
+    "unblockConfirmTitle": "Réactiver le compte",
+    "unblockConfirmMsg": "Êtes-vous sûr de vouloir réactiver ce compte ?",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "blockedDone": "Compte bloqué",
+    "unblockedDone": "Compte réactivé"
+  },
+  "rating": {
+    "sellerRating": "{{avg}} ({{count}} avis)",
+    "noRatingsYet": "Aucun avis pour le moment",
+    "recentReviewsTitle": "Derniers avis",
+    "rateSellerBtn": "⭐ Évaluer le vendeur",
+    "alreadyRated": "✓ Vous avez déjà évalué ce vendeur",
+    "screenHeader": "Évaluer le vendeur",
+    "ratingLabel": "Comment évaluez-vous l'expérience ?",
+    "commentPlaceholder": "Ajoutez un commentaire si vous le souhaitez (optionnel)...",
+    "submitBtn": "Envoyer l'évaluation",
+    "submitting": "Envoi en cours...",
+    "missingRatingTitle": "Manquant",
+    "missingRatingMsg": "Choisissez un nombre d'étoiles",
+    "successTitle": "Merci",
+    "successMsg": "Votre évaluation a été enregistrée avec succès",
+    "errorTitle": "Erreur",
+    "errorMsg": "Impossible d'enregistrer l'évaluation.\n{{error}}"
   }
 }

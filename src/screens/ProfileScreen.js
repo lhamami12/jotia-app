@@ -167,6 +167,15 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         )}
 
+        {isAdmin && (
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AdminUsers')}>
+            <Text style={styles.chevron}>‹</Text>
+            <View style={styles.cardContent}>
+              <Text style={styles.cardTitle}>{t('profile.adminUsers')}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity style={styles.card} onPress={logout}>
           <View style={styles.cardContent}>
             <Text style={[styles.cardTitle, { color: colors.marker }]}> {t('profile.logout')}</Text>

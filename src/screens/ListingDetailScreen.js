@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { getOrCreateConversation } from '../services/chat';
 import { getUserProfile } from '../services/users';
 import { subscribeToListings } from '../services/listings';
+import { subscribeToSellerReviews, hasUserRatedSeller } from '../services/reviews';
 import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
@@ -17,6 +18,8 @@ export default function ListingDetailScreen({ route, navigation }) {
   const [activeImg, setActiveImg] = useState(0);
   const [sellerName, setSellerName] = useState(t('detail.defaultSeller'));
   const [similar, setSimilar] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [alreadyRated, setAlreadyRated] = useState(false);
 
   const images = listing.imageUrls && listing.imageUrls.length ? listing.imageUrls : [];
 
@@ -33,6 +36,21 @@ export default function ListingDetailScreen({ route, navigation }) {
     });
     return unsub;
   }, [listing.city, listing.cat]);
+
+  useEffect(() => {
+    if (!listing.userId) return;
+    const unsub = subscribeToSellerReviews(listing.userId, setReviews);
+    return unsub;
+  }, [listing.userId]);
+
+  useEffect(() => {
+    if (!listing.userId || !user || user.uid === listing.userId) return;
+    hasUserRatedSeller(listing.userId, user.uid).then(setAlreadyRated).catch(() => {});
+  }, [listing.userId, user]);
+
+  const avgRating = reviews.length
+    ? (reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length).toFixed(1)
+    : null;
 
   const shareListing = async () => {
     try {
@@ -130,7 +148,9 @@ export default function ListingDetailScreen({ route, navigation }) {
           <View style={styles.avatar}><Text style={{ color: colors.mustard, fontWeight: '900' }}>ن</Text></View>
           <View>
             <Text style={styles.sellerName}>{sellerName}</Text>
-            <Text style={styles.sellerSub}>{t('detail.sellerBadge')}</Text>
+            <Text style={styles.sellerSub}>
+              {avgRating ? `⭐ ${t('rating.sellerRating', { avg: avgRating, count: reviews.length })}` : t('rating.noRatingsYet')}
+            </Text>
           </View>
         </View>
 
@@ -142,6 +162,34 @@ export default function ListingDetailScreen({ route, navigation }) {
             <Text style={styles.tradeText}>{listing.trade}</Text>
           </View>
         ) : null}
+        {user && listing.userId !== user.uid && !alreadyRated ? (
+          <TouchableOpacity
+            style={styles.rateBtn}
+            onPress={() => navigation.navigate('RateSeller', { sellerId: listing.userId, sellerName, listingId: listing.id })}
+          >
+            <Text style={styles.rateBtnText}>{t('rating.rateSellerBtn')}</Text>
+          </TouchableOpacity>
+        ) : null}
+
+        {user && listing.userId !== user.uid && alreadyRated ? (
+          <Text style={styles.alreadyRatedText}>{t('rating.alreadyRated')}</Text>
+        ) : null}
+
+        {reviews.length > 0 ? (
+          <View style={{ marginTop: 20 }}>
+            <Text style={styles.similarTitle}>{t('rating.recentReviewsTitle')}</Text>
+            {reviews.slice(0, 2).map((r) => (
+              <View key={r.id} style={styles.reviewCard}>
+                <View style={styles.reviewHeader}>
+                  <Text style={styles.reviewStars}>{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</Text>
+                  <Text style={styles.reviewAuthor}>{r.buyerName || '—'}</Text>
+                </View>
+                {r.comment ? <Text style={styles.reviewComment}>{r.comment}</Text> : null}
+              </View>
+            ))}
+          </View>
+        ) : null}
+
         <TouchableOpacity style={styles.reportBtn} onPress={() => navigation.navigate("ReportListing", { listing })}>
           <Text style={styles.reportBtnText}>{t('detail.reportBtn')}</Text>
         </TouchableOpacity>
@@ -215,4 +263,12 @@ const styles = StyleSheet.create({
   btnPrimary: { backgroundColor: colors.marker },
   btnSecondary: { backgroundColor: colors.tarp },
   btnWhatsapp: { width: 52, backgroundColor: '#25D366', borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  rateBtn: { marginTop: 18, backgroundColor: colors.mustard, borderRadius: 14, paddingVertical: 12, alignItems: 'center' },
+  rateBtnText: { color: colors.ink, fontWeight: '900', fontSize: 14 },
+  alreadyRatedText: { marginTop: 18, textAlign: 'center', color: colors.muted, fontSize: 12.5, fontWeight: '700' },
+  reviewCard: { backgroundColor: '#efe8d8', borderRadius: 12, padding: 12, marginBottom: 10 },
+  reviewHeader: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' },
+  reviewStars: { color: colors.mustard, fontSize: 13 },
+  reviewAuthor: { fontWeight: '700', fontSize: 12.5, color: colors.ink },
+  reviewComment: { fontSize: 12.5, color: '#4a4238', textAlign: 'right', marginTop: 6, lineHeight: 18 },
 });

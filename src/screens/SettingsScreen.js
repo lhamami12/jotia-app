@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, ScrollView, SafeAreaView, Alert, Platform, StatusBar, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../services/firebase';
 import { useAuth } from '../context/AuthContext';
 import { colors, fonts, spacing, radius } from '../theme/theme';
 import { registerForPushNotifications, disablePushNotifications } from '../services/notifications';
@@ -12,14 +12,13 @@ export default function SettingsScreen() {
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const db = getFirestore();
 
   useEffect(() => {
     const loadSettings = async () => {
       if (!user?.uid) return;
       try {
-        const snap = await getDoc(doc(db, 'users', user.uid));
-        if (snap.exists()) {
+        const snap = await db.collection('users').doc(user.uid).get();
+        if (snap.exists) {
           const data = snap.data();
           if (data.notificationsEnabled !== undefined) {
             setNotificationsEnabled(data.notificationsEnabled);
@@ -49,7 +48,7 @@ export default function SettingsScreen() {
 
     setNotificationsEnabled(value);
     try {
-      await updateDoc(doc(db, 'users', user.uid), { notificationsEnabled: value });
+      await db.collection('users').doc(user.uid).update({ notificationsEnabled: value });
     } catch (e) {
       Alert.alert(t('settings.errorAlertTitle'), t('settings.errorAlertMessage'));
       setNotificationsEnabled(!value);
@@ -60,7 +59,7 @@ export default function SettingsScreen() {
     i18n.changeLanguage(lang);
     if (user?.uid) {
       try {
-        await updateDoc(doc(db, 'users', user.uid), { language: lang });
+        await db.collection('users').doc(user.uid).update({ language: lang });
       } catch (e) {
         console.log('Erreur sauvegarde langue:', e);
       }

@@ -20,6 +20,8 @@ import MyListingsScreen from './src/screens/MyListingsScreen';
 import EditListingScreen from './src/screens/EditListingScreen';
 import ReportListingScreen from './src/screens/ReportListingScreen';
 import AdminReportsScreen from './src/screens/AdminReportsScreen';
+import AdminUsersScreen from './src/screens/AdminUsersScreen';
+import RateSellerScreen from './src/screens/RateSellerScreen';
 import FavoritesScreen from './src/screens/FavoritesScreen';
 import { AuthProvider } from './src/context/AuthContext';
 import { colors } from './src/theme/theme';
@@ -86,6 +88,8 @@ export default function App() {
 <Stack.Screen name="EditListing" component={EditListingScreen} options={{ presentation: 'modal' }} />          
 <Stack.Screen name="ReportListing" component={ReportListingScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="AdminReports" component={AdminReportsScreen} options={{ presentation: 'modal' }} />
+            <Stack.Screen name="AdminUsers" component={AdminUsersScreen} options={{ presentation: 'modal' }} />
+            <Stack.Screen name="RateSeller" component={RateSellerScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Favorites" component={FavoritesScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Settings" component={SettingsScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Privacy" component={PrivacyScreen} options={{ presentation: 'modal' }} />

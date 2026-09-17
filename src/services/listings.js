@@ -1,12 +1,9 @@
-// دوال التعامل مع الإعلانات عبر قاعدة بيانات Firestore
-import {
-  collection, addDoc, updateDoc, deleteDoc, doc, getDoc,
-  query, where, orderBy, onSnapshot, serverTimestamp,
-} from 'firebase/firestore';
+// Listing functions using Firestore
+import firestore from '@react-native-firebase/firestore';
 import { db } from './firebase';
 import { getRegionByCity } from '../data/regions';
 
-const listingsRef = collection(db, 'listings');
+const listingsRef = db.collection('listings');
 
 function dedupeAndSort(a, b) {
   const merged = [...a, ...b];
@@ -20,7 +17,7 @@ function dedupeAndSort(a, b) {
   return deduped;
 }
 
-// الاستمعاع الحي لقائمة الإعلانات: كنجمعو إعلانات المدينة + الإعلانات الجهوية ديال باقي مدن نفس الجهة
+// Live listener for listings: combines city listings + region listings from other cities in the same region
 export function subscribeToListings(city, category, callback) {
   const region = getRegionByCity(city);
   let cityItems = [];
@@ -28,39 +25,30 @@ export function subscribeToListings(city, category, callback) {
 
   const emit = () => callback(dedupeAndSort(cityItems, regionItems));
 
-  const catFilter = category && category !== 'الكل' ? [where('cat', '==', category)] : [];
+  let qCity = listingsRef.where('city', '==', city).where('deleted', '==', false);
+  if (category && category !== 'الكل') qCity = qCity.where('cat', '==', category);
+  qCity = qCity.orderBy('createdAt', 'desc');
 
-  const qCity = query(
-    listingsRef,
-    where('city', '==', city),
-    where('deleted', '==', false),
-    ...catFilter,
-    orderBy('createdAt', 'desc')
-  );
-  const unsubCity = onSnapshot(qCity, (snapshot) => {
+  const unsubCity = qCity.onSnapshot((snapshot) => {
     cityItems = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
     emit();
   }, (error) => {
-    console.log('خطأ في جلب إعلانات المدينة: ', error.message);
+    console.log('City listings error: ', error.message);
     cityItems = [];
     emit();
   });
 
   let unsubRegion = () => {};
   if (region) {
-    const qRegion = query(
-      listingsRef,
-      where('region', '==', region),
-      where('scope', '==', 'region'),
-      where('deleted', '==', false),
-      ...catFilter,
-      orderBy('createdAt', 'desc')
-    );
-    unsubRegion = onSnapshot(qRegion, (snapshot) => {
+    let qRegion = listingsRef.where('region', '==', region).where('scope', '==', 'region').where('deleted', '==', false);
+    if (category && category !== 'الكل') qRegion = qRegion.where('cat', '==', category);
+    qRegion = qRegion.orderBy('createdAt', 'desc');
+
+    unsubRegion = qRegion.onSnapshot((snapshot) => {
       regionItems = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
       emit();
     }, (error) => {
-      console.log('خطأ في جلب الإعلانات الجهوية: ', error.message);
+      console.log('Region listings error: ', error.message);
       regionItems = [];
       emit();
     });
@@ -72,30 +60,30 @@ export function subscribeToListings(city, category, callback) {
   };
 }
 
-// تعديل إعلان
+// Update a listing
 export async function updateListing(listingId, changes) {
-  return updateDoc(doc(db, 'listings', listingId), changes);
+  return listingsRef.doc(listingId).update(changes);
 }
 
-// حذف ناعم (Soft delete) — نعلم الإعلان محذوف بدل حذفه من قاعدة البيانات
+// Soft delete — mark listing as deleted instead of removing it
 export async function softDeleteListing(listingId) {
-  return updateDoc(doc(db, 'listings', listingId), { deleted: true });
+  return listingsRef.doc(listingId).update({ deleted: true });
 }
 
-// معاينة إعلانات المستخدم
+// Watch the current user's own listings
 export function subscribeToMyListings(userId, callback) {
-  const q = query(listingsRef, where('userId', '==', userId), where('deleted', '==', false), orderBy('createdAt', 'desc'));
-  return onSnapshot(q, (snapshot) => {
+  const q = listingsRef.where('userId', '==', userId).where('deleted', '==', false).orderBy('createdAt', 'desc');
+  return q.onSnapshot((snapshot) => {
     callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
-  });
+  }, (error) => { console.log("MY_LISTINGS_ERROR:", error.message); });
 }
 
-// إنشاء إعلان جديد
-// scope: 'city' (افتراضي، محلي) أو 'region' (يبان فكل مدن الجهة)
-// imageUrls: array من روابط الصور (يمكن أن تكون فارغة)
+// Create a new listing
+// scope: 'city' (default, local) or 'region' (visible across the whole region)
+// imageUrls: array of image URLs (can be empty)
 export async function createListing({ title, price, cat, city, type, desc, trade, emoji, imageUrls, userId, userPhone, scope, region }) {
   const urls = imageUrls && imageUrls.length ? imageUrls : [];
-  return addDoc(listingsRef, {
+  return listingsRef.add({
     title, price, cat, city, type, desc,
     scope: scope || 'city',
     region: region || getRegionByCity(city) || null,
@@ -106,22 +94,22 @@ export async function createListing({ title, price, cat, city, type, desc, trade
     userId,
     userPhone,
     deleted: false,
-    createdAt: serverTimestamp(),
+    createdAt: firestore.FieldValue.serverTimestamp(),
   });
 }
 
-// بحث شامل: كنجيبو كل الإعلانات الغير محذوفة، بلا فلترة مدينة أو فئة
+// Global search: all non-deleted listings, no city or category filter
 export function subscribeToAllListings(callback) {
-  const q = query(listingsRef, where('deleted', '==', false), orderBy('createdAt', 'desc'));
-  return onSnapshot(q, (snapshot) => {
+  const q = listingsRef.where('deleted', '==', false).orderBy('createdAt', 'desc');
+  return q.onSnapshot((snapshot) => {
     callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
   }, (error) => {
-    console.log('خطأ فالبحث الشامل: ', error.message);
+    console.log('Global search error: ', error.message);
     callback([]);
   });
 }
 
 export async function getListingById(listingId) {
-  const snap = await getDoc(doc(db, 'listings', listingId));
-  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+  const snap = await listingsRef.doc(listingId).get();
+  return snap.exists ? { id: snap.id, ...snap.data() } : null;
 }

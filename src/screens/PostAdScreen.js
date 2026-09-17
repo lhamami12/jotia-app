@@ -49,12 +49,12 @@ export default function PostAdScreen() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       quality: 0.6,
       allowsMultipleSelection: true,
       selectionLimit: remaining,
     });
-    if (!result.canceled) {
+    console.log('IMAGE PICKER RESULT:', JSON.stringify(result)); if (!result.canceled) {
       const newUris = result.assets.map((a) => a.uri).slice(0, remaining);
       setImageUris((prev) => [...prev, ...newUris]);
     }

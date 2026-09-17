@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform } from 'react-native';
 import { colors } from '../theme/theme';
 import { useAuth } from '../context/AuthContext';
-import { subscribeToMessages, sendMessage } from '../services/chat';
+import { subscribeToMessages, sendMessage, markConversationAsRead } from '../services/chat';
 import { useTranslation } from 'react-i18next';
 
 
@@ -25,6 +25,12 @@ export default function ChatScreen({ route, navigation }) {
     const unsubscribe = subscribeToMessages(conversationId, setMessages);
     return unsubscribe;
   }, [conversationId]);
+
+  useEffect(() => {
+    if (user) {
+      markConversationAsRead(conversationId, user.uid).catch(() => {});
+    }
+  }, [conversationId, user]);
 
   const send = async (content) => {
     const value = (content ?? text).trim();

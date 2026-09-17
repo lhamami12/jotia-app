@@ -60,7 +60,8 @@
     "nameEmptyTitle": "ناقص",
     "nameEmptyMessage": "دخل الاسم لي بغيتي",
     "errorTitle": "خطأ",
-    "saveNameError": "ماقدرناش نحفظو الاسم."
+    "saveNameError": "ماقدرناش نحفظو الاسم.",
+    "adminUsers": "إدارة المستخدمين"
   },
   "nav": {
     "home": "الرئيسية",
@@ -141,7 +142,11 @@
     "loginNeeded": "سجل الدخول باش تشوف المحادثات ديالك",
     "emptyTitle": "ماعندكش رسائل دابا",
     "emptySub": "ابدأ محادثة من أي إعلان يعجبك",
-    "startChat": "ابدا المحادثة..."
+    "startChat": "ابدا المحادثة...",
+    "deleteTitle": "حذف المحادثة",
+    "deleteMsg": "واش متأكد بغيتي تحذف هاد المحادثة؟",
+    "cancel": "إلغاء",
+    "delete": "حذف"
   },
   "chat": {
     "defaultUserName": "المستخدم",
@@ -399,5 +404,46 @@
     "dismissBtn": "✓ تجاهل",
     "viewBtn": "👁️ شوف الإعلان",
     "blockBtn": "🚫 توقيف الحساب"
+  },
+  "adminUsers": {
+    "header": "إدارة المستخدمين",
+    "searchPlaceholder": "رقم الهاتف أو الإيميل",
+    "searchBtn": "بحث",
+    "searching": "...كنبحثو",
+    "noResults": "ماكاينش نتائج لهاد البحث",
+    "errorTitle": "خطأ",
+    "resultName": "الاسم: {{name}}",
+    "resultPhone": "الهاتف: {{phone}}",
+    "resultEmail": "الإيميل: {{email}}",
+    "statusBlocked": "🚫 الحساب موقّف",
+    "statusActive": "✅ الحساب نشط",
+    "blockBtn": "توقيف الحساب",
+    "unblockBtn": "تنشيط الحساب",
+    "blockConfirmTitle": "توقيف الحساب",
+    "blockConfirmMsg": "واش متأكد بغيتي توقف هاد الحساب؟",
+    "unblockConfirmTitle": "تنشيط الحساب",
+    "unblockConfirmMsg": "واش متأكد بغيتي تنشط هاد الحساب؟",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "blockedDone": "تم توقيف الحساب",
+    "unblockedDone": "تم تنشيط الحساب"
+  },
+  "rating": {
+    "sellerRating": "{{avg}} ({{count}} تقييم)",
+    "noRatingsYet": "لا توجد تقييمات بعد",
+    "recentReviewsTitle": "آخر التقييمات",
+    "rateSellerBtn": "⭐ قيّم البائع",
+    "alreadyRated": "✓ قيّمتي هاد البائع من قبل",
+    "screenHeader": "تقييم البائع",
+    "ratingLabel": "شحال كتقيم التجربة؟",
+    "commentPlaceholder": "زيد تعليق إلا بغيتي (اختياري)...",
+    "submitBtn": "إرسال التقييم",
+    "submitting": "...كنصيفطو",
+    "missingRatingTitle": "ناقص",
+    "missingRatingMsg": "اختار عدد النجوم",
+    "successTitle": "شكرا",
+    "successMsg": "تسجل التقييم ديالك بنجاح",
+    "errorTitle": "خطأ",
+    "errorMsg": "ماقدرناش نسجلو التقييم.\n{{error}}"
   }
 }

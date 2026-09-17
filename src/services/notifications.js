@@ -1,7 +1,6 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { Platform } from 'react-native';
-import { doc, updateDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
 Notifications.setNotificationHandler({
@@ -14,13 +13,12 @@ Notifications.setNotificationHandler({
 
 export async function registerForPushNotifications(uid) {
   if (!Device.isDevice) {
-    console.log('الإشعارات كتخدم غير على جهاز حقيقي');
+    console.log('Push notifications only work on a real device');
     return null;
   }
 
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
-
   if (existingStatus !== 'granted') {
     const { status } = await Notifications.requestPermissionsAsync();
     finalStatus = status;
@@ -46,18 +44,18 @@ export async function registerForPushNotifications(uid) {
     const token = tokenData.data;
 
     if (uid) {
-      await updateDoc(doc(db, 'users', uid), { pushToken: token });
+      await db.collection('users').doc(uid).update({ pushToken: token });
     }
 
     return token;
   } catch (e) {
-    console.log('خطأ فجلب push token:', e);
+    console.log('Error getting push token:', e);
     return null;
   }
 }
 
 export async function disablePushNotifications(uid) {
   if (uid) {
-    await updateDoc(doc(db, 'users', uid), { pushToken: null });
+    await db.collection('users').doc(uid).update({ pushToken: null });
   }
 }

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../theme/theme';
 import { useAuth } from '../context/AuthContext';
-import { subscribeToMyConversations } from '../services/chat';
+import { subscribeToMyConversations, deleteConversationForUser } from '../services/chat';
 import { useTranslation } from 'react-i18next';
 
 export default function MessagesScreen() {
@@ -46,6 +46,21 @@ export default function MessagesScreen() {
         }
         renderItem={({ item }) => {
           const otherPhone = item.sellerId === user.uid ? item.buyerPhone : item.sellerPhone;
+          const unreadCount = item.unreadCounts?.[user.uid] || 0;
+          const handleDelete = () => {
+            Alert.alert(
+              t('messages.deleteTitle'),
+              t('messages.deleteMsg'),
+              [
+                { text: t('messages.cancel'), style: 'cancel' },
+                {
+                  text: t('messages.delete'),
+                  style: 'destructive',
+                  onPress: () => deleteConversationForUser(item.id, user.uid).catch(() => {}),
+                },
+              ]
+            );
+          };
           return (
             <TouchableOpacity
               style={styles.card}
@@ -57,9 +72,19 @@ export default function MessagesScreen() {
             >
               <View style={styles.avatar}><Text>{item.listingEmoji || '📦'}</Text></View>
               <View style={{ flex: 1 }}>
-                <Text style={styles.title}>{item.listingTitle}</Text>
+                <View style={styles.titleRow}>
+                  <Text style={styles.title}>{item.listingTitle}</Text>
+                  {unreadCount > 0 && (
+                    <View style={styles.badge}>
+                      <Text style={styles.badgeText}>{unreadCount > 99 ? '99+' : unreadCount}</Text>
+                    </View>
+                  )}
+                </View>
                 <Text style={styles.lastMsg} numberOfLines={1}>{item.lastMessage || t('messages.startChat')}</Text>
               </View>
+              <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                <Text style={styles.deleteIcon}>🗑️</Text>
+              </TouchableOpacity>
             </TouchableOpacity>
           );
         }}
@@ -79,4 +104,9 @@ const styles = StyleSheet.create({
   avatar: { width: 42, height: 42, borderRadius: 21, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
   title: { fontWeight: '700', fontSize: 13.5, color: colors.ink, textAlign: 'right' },
   lastMsg: { fontSize: 12, color: '#8a8378', textAlign: 'right', marginTop: 2 },
+  titleRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  badge: { backgroundColor: colors.marker, borderRadius: 10, minWidth: 20, height: 20, paddingHorizontal: 5, alignItems: 'center', justifyContent: 'center' },
+  badgeText: { color: colors.paper, fontSize: 10.5, fontWeight: '900' },
+  deleteBtn: { padding: 6 },
+  deleteIcon: { fontSize: 16 },
 });
