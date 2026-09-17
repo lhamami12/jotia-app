@@ -38,13 +38,11 @@ export default function PostAdScreen() {
   const [submitting, setSubmitting] = useState(false);
 
   const pickImages = async () => {
-    Alert.alert('DEBUG', 'pickImages called');
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
       Alert.alert(t('post.imagePermissionTitle'), t('post.imagePermissionMsg'));
       return;
     }
-    Alert.alert('DEBUG', 'permission granted: ' + permission.granted);
     const remaining = MAX_IMAGES - imageUris.length;
     if (remaining <= 0) {
       Alert.alert(t('post.maxImagesTitle'), t('post.maxImagesMsg', { max: MAX_IMAGES }));
@@ -59,10 +57,9 @@ export default function PostAdScreen() {
       selectionLimit: remaining,
     });
     } catch (e) {
-      Alert.alert('DEBUG ERROR', e.message + String(e.stack).slice(0,300));
+      Alert.alert(t('post.imagePermissionTitle'), t('post.imagePermissionMsg'));
       return;
     }
-    Alert.alert('DEBUG', JSON.stringify(result).slice(0, 500));
     if (!result.canceled) {
       const newUris = result.assets.map((a) => a.uri).slice(0, remaining);
       setImageUris((prev) => [...prev, ...newUris]);
