@@ -54,7 +54,7 @@ export default function PostAdScreen() {
       allowsMultipleSelection: true,
       selectionLimit: remaining,
     });
-    console.log('IMAGE PICKER RESULT:', JSON.stringify(result)); if (!result.canceled) {
+    Alert.alert('DEBUG', JSON.stringify(result).slice(0, 500)); if (!result.canceled) {
       const newUris = result.assets.map((a) => a.uri).slice(0, remaining);
       setImageUris((prev) => [...prev, ...newUris]);
     }
