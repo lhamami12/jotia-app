@@ -31,7 +31,6 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="jotia"/>
-        <data android:scheme="com.jotia.app"/>
       </intent-filter>
     </activity>
   </application>
