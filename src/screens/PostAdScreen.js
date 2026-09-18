@@ -188,7 +188,7 @@ export default function PostAdScreen() {
 
         <Text style={styles.label}>{t('post.descLabel')}</Text>
         <TextInput
-          style={[styles.input, { height: 90, textAlignVertical: 'top' }]}
+          style={[styles.input, { minHeight: 90, maxHeight: 200, textAlignVertical: 'top' }]}
           value={desc}
           onChangeText={setDesc}
           placeholder={t('post.descPlaceholder')}
