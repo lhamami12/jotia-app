@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Platform, StatusBar, Image, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Platform, StatusBar, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { colors } from '../theme/theme';
 import { useAuth } from '../context/AuthContext';

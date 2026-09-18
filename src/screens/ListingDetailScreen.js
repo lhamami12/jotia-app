@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, Share, ActivityIndicator, Image, Linking, Alert, Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Share, ActivityIndicator, Image, Linking, Alert, Dimensions } from 'react-native';
 import { colors } from '../theme/theme';
 import { useAuth } from '../context/AuthContext';
 import { getOrCreateConversation } from '../services/chat';

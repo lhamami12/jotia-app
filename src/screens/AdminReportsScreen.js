@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, SafeAreaView, Platform, StatusBar, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Platform, StatusBar, Alert } from 'react-native';
 import { colors } from '../theme/theme';
 import { subscribeToPendingReports, resolveReport } from '../services/reports';
 import { softDeleteListing, getListingById } from '../services/listings';
