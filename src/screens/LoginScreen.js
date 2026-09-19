@@ -49,7 +49,7 @@ export default function LoginScreen({ navigation }) {
       navigation.navigate('Verify', { confirmation, phone: formatted });
     } catch (error) {
       setSending(false);
-      Alert.alert(t('login.errorTitle'), t('login.sendCodeError') + '\n' + error.message);
+      Alert.alert(t('login.errorTitle'), t('login.sendCodeError') + '\n' + error.code + '\n' + String(error.nativeErrorMessage) + '\n' + error.message);
     }
   };
 

@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "150628485816-j8d9sf7e6o794i0qt2dmj8veei4qin8f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jotia.app",
+            "certificate_hash": "fedeba4118fa32dd771ed9405fb55542c628faea"
+          }
+        },
+        {
+          "client_id": "150628485816-jvt1bsmr43ifhm1pfvvu7pl5u06cr1fa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jotia.app",
+            "certificate_hash": "cac81d0d4bfb8101281d878292d1a37a46f173d6"
+          }
+        },
+        {
           "client_id": "150628485816-vo02sn279n5k8f551k0ecq8gj1ut4rpe.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
