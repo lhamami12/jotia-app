@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
@@ -65,11 +66,11 @@ export default function PrivacyScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
-  header: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', padding: 20 },
+  header: { flexDirection: dir.row, alignItems: 'center', justifyContent: 'space-between', padding: 20 },
   closeBtn: { color: colors.paper, fontSize: 20, fontWeight: '700' },
   headerTitle: { color: colors.mustard, fontSize: 17, fontWeight: '900' },
-  updated: { color: colors.muted, fontSize: 12, textAlign: 'right', marginBottom: 16 },
-  sectionTitle: { color: colors.mustard, fontSize: 15, fontWeight: '900', textAlign: 'right', marginTop: 18, marginBottom: 6 },
-  paragraph: { color: colors.paper, fontSize: 14, lineHeight: 24, textAlign: 'right' },
-  link: { color: colors.mustard, fontSize: 14, textAlign: 'right', marginTop: 4, fontWeight: '700' },
+  updated: { color: colors.muted, fontSize: 12, textAlign: dir.align, marginBottom: 16 },
+  sectionTitle: { color: colors.mustard, fontSize: 15, fontWeight: '900', textAlign: dir.align, marginTop: 18, marginBottom: 6 },
+  paragraph: { color: colors.paper, fontSize: 14, lineHeight: 24, textAlign: dir.align },
+  link: { color: colors.mustard, fontSize: 14, textAlign: dir.align, marginTop: 4, fontWeight: '700' },
 });

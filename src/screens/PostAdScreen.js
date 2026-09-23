@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
@@ -211,9 +212,9 @@ const styles = StyleSheet.create({
   centerIcon: { fontSize: 40 },
   centerTitle: { color: colors.paper, fontWeight: '900', fontSize: 16 },
   centerSub: { color: colors.paper, opacity: 0.7, fontSize: 13, textAlign: 'center' },
-  header: { fontSize: 22, fontWeight: '900', color: colors.paper, textAlign: 'right', marginBottom: 16 },
+  header: { fontSize: 22, fontWeight: '900', color: colors.paper, textAlign: dir.align, marginBottom: 16 },
   uploadBox: { height: 90, borderRadius: 14, borderWidth: 2, borderColor: 'rgba(247,243,232,.3)', borderStyle: 'dashed', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
-  scopeRow: { flexDirection: 'row-reverse', gap: 10, marginBottom: 8 },
+  scopeRow: { flexDirection: dir.row, gap: 10, marginBottom: 8 },
   scopeBtn: { flex: 1, backgroundColor: colors.tarpDark, borderRadius: 12, paddingVertical: 12, alignItems: 'center', borderWidth: 1.5, borderColor: 'rgba(247,243,232,.2)' },
   scopeBtnActive: { backgroundColor: colors.mustard, borderColor: colors.mustard },
   scopeText: { color: colors.paper, fontSize: 12.5, fontWeight: '700' },
@@ -225,14 +226,14 @@ const styles = StyleSheet.create({
   thumbRemove: { position: 'absolute', top: 4, right: 4, backgroundColor: 'rgba(0,0,0,.6)', borderRadius: 10, width: 20, height: 20, alignItems: 'center', justifyContent: 'center' },
   thumbRemoveText: { color: colors.paper, fontSize: 11, fontWeight: '900' },
   removeImageText: { color: colors.marker, fontSize: 12, fontWeight: '700', textAlign: 'center', marginTop: 8 },
-  label: { color: colors.mustard, fontSize: 12.5, fontWeight: '700', textAlign: 'right', marginTop: 14, marginBottom: 6 },
+  label: { color: colors.mustard, fontSize: 12.5, fontWeight: '700', textAlign: dir.align, marginTop: 14, marginBottom: 6 },
   input: { backgroundColor: colors.kraft, borderRadius: 12, padding: 13, fontSize: 14, color: colors.ink },
-  chipsWrap: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8 },
+  chipsWrap: { flexDirection: dir.row, flexWrap: 'wrap', gap: 8 },
   chip: { backgroundColor: colors.kraft, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 18 },
   chipActive: { backgroundColor: colors.marker },
   chipText: { fontSize: 12, fontWeight: '700', color: colors.ink },
   chipTextActive: { color: colors.paper },
-  toggleRow: { flexDirection: 'row-reverse', gap: 8 },
+  toggleRow: { flexDirection: dir.row, gap: 8 },
   toggleOpt: { flex: 1, backgroundColor: colors.kraft, paddingVertical: 12, borderRadius: 12, alignItems: 'center' },
   toggleOptSel: { backgroundColor: colors.marker },
   toggleText: { fontSize: 12.5, fontWeight: '700', color: colors.ink },

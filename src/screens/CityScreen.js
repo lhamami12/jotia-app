@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
@@ -44,13 +45,13 @@ export default function CityScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
   backRow: { paddingHorizontal: 20, paddingTop: 14 },
-  backText: { color: colors.mustard, fontWeight: '700', textAlign: 'right' },
+  backText: { color: colors.mustard, fontWeight: '700', textAlign: dir.align },
   hero: { padding: 24, paddingTop: 10 },
-  title: { fontSize: 24, fontWeight: '900', color: colors.mustard, textAlign: 'right' },
-  subtitle: { fontSize: 14, color: colors.paper, opacity: 0.75, marginTop: 8, textAlign: 'right' },
+  title: { fontSize: 24, fontWeight: '900', color: colors.mustard, textAlign: dir.align },
+  subtitle: { fontSize: 14, color: colors.paper, opacity: 0.75, marginTop: 8, textAlign: dir.align },
   cityItem: {
     backgroundColor: colors.kraft, padding: 16, borderRadius: 14, marginBottom: 10,
-    flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center',
+    flexDirection: dir.row, justifyContent: 'space-between', alignItems: 'center',
     borderRightWidth: 5, borderRightColor: colors.marker,
   },
   cityName: { fontWeight: '700', fontSize: 15, color: colors.ink },

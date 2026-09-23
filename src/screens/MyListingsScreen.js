@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Platform, StatusBar, Image, Alert } from 'react-native';
@@ -105,12 +106,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 12 : 20,
     paddingBottom: 10,
-    textAlign: 'right',
+    textAlign: dir.align,
   },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
   emptyText: { color: colors.paper, opacity: 0.7 },
   card: {
-    flexDirection: 'row-reverse',
+    flexDirection: dir.row,
     backgroundColor: colors.paper,
     borderRadius: 16,
     padding: 12,
@@ -120,9 +121,9 @@ const styles = StyleSheet.create({
   image: { width: 70, height: 70, borderRadius: 12 },
   imagePlaceholder: { backgroundColor: colors.kraft, alignItems: 'center', justifyContent: 'center' },
   info: { flex: 1, justifyContent: 'center' },
-  title: { fontWeight: '900', fontSize: 14, color: colors.ink, textAlign: 'right' },
-  price: { fontSize: 13, color: colors.muted, textAlign: 'right', marginTop: 2, marginBottom: 8 },
-  actionsRow: { flexDirection: 'row-reverse', gap: 8 },
+  title: { fontWeight: '900', fontSize: 14, color: colors.ink, textAlign: dir.align },
+  price: { fontSize: 13, color: colors.muted, textAlign: dir.align, marginTop: 2, marginBottom: 8 },
+  actionsRow: { flexDirection: dir.row, gap: 8 },
   actionBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 10 },
   editBtn: { backgroundColor: colors.kraft },
   deleteBtn: { backgroundColor: '#f8d7da' },

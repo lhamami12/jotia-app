@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
@@ -101,11 +102,11 @@ const styles = StyleSheet.create({
   emIcon: { fontSize: 36 },
   centerText: { color: colors.paper, fontWeight: '700', fontSize: 14 },
   centerSub: { color: colors.paper, opacity: 0.7, fontSize: 12.5 },
-  card: { flexDirection: 'row-reverse', alignItems: 'center', gap: 12, backgroundColor: colors.kraft, borderRadius: 14, padding: 12, marginBottom: 10 },
+  card: { flexDirection: dir.row, alignItems: 'center', gap: 12, backgroundColor: colors.kraft, borderRadius: 14, padding: 12, marginBottom: 10 },
   avatar: { width: 42, height: 42, borderRadius: 21, backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center' },
-  title: { fontWeight: '700', fontSize: 13.5, color: colors.ink, textAlign: 'right' },
-  lastMsg: { fontSize: 12, color: '#8a8378', textAlign: 'right', marginTop: 2 },
-  titleRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 },
+  title: { fontWeight: '700', fontSize: 13.5, color: colors.ink, textAlign: dir.align },
+  lastMsg: { fontSize: 12, color: '#8a8378', textAlign: dir.align, marginTop: 2 },
+  titleRow: { flexDirection: dir.row, alignItems: 'center', gap: 6 },
   badge: { backgroundColor: colors.marker, borderRadius: 10, minWidth: 20, height: 20, paddingHorizontal: 5, alignItems: 'center', justifyContent: 'center' },
   badgeText: { color: colors.paper, fontSize: 10.5, fontWeight: '900' },
   deleteBtn: { padding: 6 },

@@ -1,3 +1,4 @@
+import { dir, isRTL } from '../i18n';
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
@@ -46,7 +47,7 @@ export default function ChatScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}><Text style={styles.headerBack}>→</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()}><Text style={styles.headerBack}>{isRTL ? '→' : '←'}</Text></TouchableOpacity>
         <View style={styles.avatar}><Text>👤</Text></View>
         <Text style={styles.headerName}>{otherName || otherPhone || t('chat.defaultUserName')}</Text>
       </View>
@@ -127,7 +128,7 @@ export default function ChatScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
-  header: { flexDirection: 'row-reverse', alignItems: 'center', gap: 10, padding: 16 },
+  header: { flexDirection: dir.row, alignItems: 'center', gap: 10, padding: 16 },
   headerBack: { color: colors.mustard, fontSize: 18, fontWeight: '700' },
   avatar: { width: 32, height: 32, borderRadius: 16, backgroundColor: colors.kraft, alignItems: 'center', justifyContent: 'center' },
   headerName: { color: colors.paper, fontWeight: '700', fontSize: 14 },
@@ -139,17 +140,17 @@ const styles = StyleSheet.create({
   bubbleThem: { backgroundColor: colors.kraft, alignSelf: 'flex-start', borderBottomLeftRadius: 4 },
   bubbleTextMe: { color: colors.paper, fontSize: 13 },
   bubbleTextThem: { color: colors.ink, fontSize: 13 },
-  quickRow: { flexDirection: 'row-reverse', gap: 8, paddingHorizontal: 14, paddingBottom: 8 },
+  quickRow: { flexDirection: dir.row, gap: 8, paddingHorizontal: 14, paddingBottom: 8 },
   safeBtn: { backgroundColor: colors.mustard, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16 },
   safeBtnText: { fontSize: 11.5, fontWeight: '700', color: colors.ink },
   offerChip: { backgroundColor: colors.kraft, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16 },
   offerChipText: { fontSize: 11.5, fontWeight: '700', color: colors.ink },
   spotsPanel: { backgroundColor: colors.paper, margin: 14, borderRadius: 14, padding: 14 },
-  spotsTitle: { fontWeight: '900', fontSize: 13, color: colors.ink, textAlign: 'right', marginBottom: 8 },
-  spotItem: { flexDirection: 'row-reverse', alignItems: 'center', gap: 10, backgroundColor: '#efe8d8', borderRadius: 12, padding: 10, marginBottom: 6 },
-  spotName: { fontWeight: '700', fontSize: 12.5, color: colors.ink, textAlign: 'right' },
-  spotSub: { fontSize: 11, color: colors.muted, textAlign: 'right' },
-  inputRow: { flexDirection: 'row-reverse', gap: 8, padding: 14, backgroundColor: colors.tarpDark },
+  spotsTitle: { fontWeight: '900', fontSize: 13, color: colors.ink, textAlign: dir.align, marginBottom: 8 },
+  spotItem: { flexDirection: dir.row, alignItems: 'center', gap: 10, backgroundColor: '#efe8d8', borderRadius: 12, padding: 10, marginBottom: 6 },
+  spotName: { fontWeight: '700', fontSize: 12.5, color: colors.ink, textAlign: dir.align },
+  spotSub: { fontSize: 11, color: colors.muted, textAlign: dir.align },
+  inputRow: { flexDirection: dir.row, gap: 8, padding: 14, backgroundColor: colors.tarpDark },
   input: { flex: 1, backgroundColor: colors.paper, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 12, fontSize: 13, color: colors.ink },
   sendBtn: { width: 42, height: 42, borderRadius: 21, backgroundColor: colors.marker, alignItems: 'center', justifyContent: 'center' },
 });

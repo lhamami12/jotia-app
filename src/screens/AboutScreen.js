@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
@@ -38,10 +39,10 @@ export default function AboutScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
-  header: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', padding: 20 },
+  header: { flexDirection: dir.row, alignItems: 'center', justifyContent: 'space-between', padding: 20 },
   closeBtn: { color: colors.paper, fontSize: 20, fontWeight: '700' },
   headerTitle: { color: colors.mustard, fontSize: 17, fontWeight: '900' },
   logoWrap: { alignItems: 'center', marginBottom: 24 },
   logo: { width: 90, height: 90, borderRadius: 22 },
-  paragraph: { color: colors.paper, fontSize: 14, lineHeight: 24, textAlign: 'right', marginBottom: 16 },
+  paragraph: { color: colors.paper, fontSize: 14, lineHeight: 24, textAlign: dir.align, marginBottom: 16 },
 });

@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, StatusBar, Alert, FlatList } from 'react-native';
@@ -110,17 +111,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 12 : 20,
     paddingBottom: 10,
-    textAlign: 'right',
+    textAlign: dir.align,
   },
-  searchRow: { flexDirection: 'row-reverse', gap: 8, paddingHorizontal: 16, marginBottom: 10 },
+  searchRow: { flexDirection: dir.row, gap: 8, paddingHorizontal: 16, marginBottom: 10 },
   input: { flex: 1, backgroundColor: colors.paper, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, fontSize: 14, color: colors.ink },
   searchBtn: { backgroundColor: colors.marker, borderRadius: 12, paddingHorizontal: 16, justifyContent: 'center' },
   searchBtnText: { color: colors.paper, fontWeight: '900', fontSize: 13 },
   noResults: { color: colors.paper, opacity: 0.7, textAlign: 'center', marginTop: 40 },
   card: { backgroundColor: colors.paper, borderRadius: 16, padding: 14, marginBottom: 12 },
-  name: { fontWeight: '900', fontSize: 14, color: colors.ink, textAlign: 'right' },
-  detail: { fontSize: 12.5, color: colors.muted, textAlign: 'right', marginTop: 4 },
-  status: { fontSize: 12.5, fontWeight: '700', textAlign: 'right', marginTop: 8 },
+  name: { fontWeight: '900', fontSize: 14, color: colors.ink, textAlign: dir.align },
+  detail: { fontSize: 12.5, color: colors.muted, textAlign: dir.align, marginTop: 4 },
+  status: { fontSize: 12.5, fontWeight: '700', textAlign: dir.align, marginTop: 8 },
   statusBlocked: { color: '#c0392b' },
   statusActive: { color: '#2e7d32' },
   actionBtn: { marginTop: 10, paddingVertical: 10, borderRadius: 12, alignItems: 'center' },

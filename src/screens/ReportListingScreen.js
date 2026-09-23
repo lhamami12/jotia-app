@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, Alert, Platform, StatusBar } from 'react-native';
@@ -104,10 +105,10 @@ export default function ReportListingScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
-  header: { color: colors.mustard, fontSize: 18, fontWeight: '900', paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) : 0, textAlign: 'right' },
-  sub: { color: colors.paper, fontSize: 13, opacity: 0.7, marginTop: 4, marginBottom: 20, textAlign: 'right' },
-  label: { color: colors.paper, fontSize: 13, fontWeight: '700', marginBottom: 8, textAlign: 'right' },
-  reasonsGrid: { flexDirection: 'row-reverse', flexWrap: 'wrap', gap: 8, marginBottom: 20 },
+  header: { color: colors.mustard, fontSize: 18, fontWeight: '900', paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) : 0, textAlign: dir.align },
+  sub: { color: colors.paper, fontSize: 13, opacity: 0.7, marginTop: 4, marginBottom: 20, textAlign: dir.align },
+  label: { color: colors.paper, fontSize: 13, fontWeight: '700', marginBottom: 8, textAlign: dir.align },
+  reasonsGrid: { flexDirection: dir.row, flexWrap: 'wrap', gap: 8, marginBottom: 20 },
   reasonChip: { backgroundColor: colors.paper, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 20 },
   reasonChipActive: { backgroundColor: colors.marker },
   reasonText: { fontSize: 12.5, fontWeight: '700', color: colors.ink },

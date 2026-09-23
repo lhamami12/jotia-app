@@ -22,3 +22,9 @@ i18n
   });
 
 export default i18n;
+
+export const isRTL = (deviceLang === 'fr' ? 'fr' : fallbackLang) === 'ar';
+export const dir = {
+  row: isRTL ? 'row-reverse' : 'row',
+  align: isRTL ? 'right' : 'left',
+};

@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
@@ -35,10 +36,10 @@ export default function ContactScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
-  header: { flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', padding: 20 },
+  header: { flexDirection: dir.row, alignItems: 'center', justifyContent: 'space-between', padding: 20 },
   closeBtn: { color: colors.paper, fontSize: 20, fontWeight: '700' },
   headerTitle: { color: colors.mustard, fontSize: 17, fontWeight: '900' },
   card: { backgroundColor: colors.paper, borderRadius: 16, padding: 16, marginBottom: 12 },
-  cardTitle: { fontWeight: '700', fontSize: 14, color: colors.ink, textAlign: 'right' },
-  cardSub: { fontSize: 12.5, color: colors.muted, textAlign: 'right', marginTop: 4 },
+  cardTitle: { fontWeight: '700', fontSize: 14, color: colors.ink, textAlign: dir.align },
+  cardSub: { fontSize: 12.5, color: colors.muted, textAlign: dir.align, marginTop: 4 },
 });

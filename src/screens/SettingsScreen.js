@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, Switch, ScrollView, Alert, Platform, StatusBar, TouchableOpacity } from 'react-native';
@@ -155,10 +156,10 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 12 : 20,
     paddingBottom: 4,
   },
-  groupLabel: { color: colors.paper, opacity: 0.6, fontSize: 12.5, fontWeight: '700', marginTop: 20, marginBottom: 6, textAlign: 'right' },
+  groupLabel: { color: colors.paper, opacity: 0.6, fontSize: 12.5, fontWeight: '700', marginTop: 20, marginBottom: 6, textAlign: dir.align },
   card: { backgroundColor: colors.paper, borderRadius: radius.lg, padding: 4 },
-  row: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 12, gap: 10 },
-  label: { fontSize: 15, color: colors.ink, fontWeight: '700', textAlign: 'right', flexShrink: 1 },
+  row: { flexDirection: dir.row, justifyContent: 'space-between', alignItems: 'center', paddingVertical: 14, paddingHorizontal: 12, gap: 10 },
+  label: { fontSize: 15, color: colors.ink, fontWeight: '700', textAlign: dir.align, flexShrink: 1 },
   value: { fontSize: 14, color: colors.muted },
   divider: { height: 1, backgroundColor: colors.kraftDark, marginHorizontal: 12 },
   guestBox: { alignItems: 'center', justifyContent: 'center', gap: 14, padding: 40 },

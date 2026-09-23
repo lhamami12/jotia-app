@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -158,16 +159,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 12 : 20,
     paddingBottom: 10,
-    textAlign: 'right',
+    textAlign: dir.align,
   },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
   emptyText: { color: colors.paper, opacity: 0.7 },
   card: { backgroundColor: colors.paper, borderRadius: 16, padding: 14, marginBottom: 12 },
-  title: { fontWeight: '900', fontSize: 14, color: colors.ink, textAlign: 'right' },
-  reason: { fontSize: 12.5, color: colors.marker, fontWeight: '700', textAlign: 'right', marginTop: 4 },
-  message: { fontSize: 12, color: colors.muted, textAlign: 'right', marginTop: 4 },
-  email: { fontSize: 11, color: colors.muted, textAlign: 'right', marginTop: 4 },
-  actionsRow: { flexDirection: 'row-reverse', gap: 8, marginTop: 10 },
+  title: { fontWeight: '900', fontSize: 14, color: colors.ink, textAlign: dir.align },
+  reason: { fontSize: 12.5, color: colors.marker, fontWeight: '700', textAlign: dir.align, marginTop: 4 },
+  message: { fontSize: 12, color: colors.muted, textAlign: dir.align, marginTop: 4 },
+  email: { fontSize: 11, color: colors.muted, textAlign: dir.align, marginTop: 4 },
+  actionsRow: { flexDirection: dir.row, gap: 8, marginTop: 10 },
   actionBtn: { flex: 1, paddingVertical: 8, borderRadius: 10, alignItems: 'center' },
   deleteBtn: { backgroundColor: '#f8d7da' },
   dismissBtn: { backgroundColor: colors.kraft },

@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
@@ -34,11 +35,11 @@ export default function RegionScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
   hero: { padding: 24, paddingTop: 36 },
-  title: { fontSize: 34, fontWeight: '900', color: colors.mustard, textAlign: 'right' },
-  subtitle: { fontSize: 14, color: colors.paper, opacity: 0.75, marginTop: 8, textAlign: 'right' },
+  title: { fontSize: 34, fontWeight: '900', color: colors.mustard, textAlign: dir.align },
+  subtitle: { fontSize: 14, color: colors.paper, opacity: 0.75, marginTop: 8, textAlign: dir.align },
   regionItem: {
     backgroundColor: colors.kraft, padding: 16, borderRadius: 14, marginBottom: 10,
-    flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center',
+    flexDirection: dir.row, justifyContent: 'space-between', alignItems: 'center',
     borderRightWidth: 5, borderRightColor: colors.marker,
   },
   regionName: { fontWeight: '700', fontSize: 15, color: colors.ink },

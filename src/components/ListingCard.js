@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { colors } from '../theme/theme';
@@ -43,9 +44,9 @@ const styles = StyleSheet.create({
   favBtn: { position: 'absolute', top: 6, left: 6, width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(0,0,0,.35)', alignItems: 'center', justifyContent: 'center' },
   favBtnOn: { backgroundColor: 'rgba(193,59,47,.85)' },
   body: { flex: 1, padding: 12, justifyContent: 'space-between' },
-  title: { fontWeight: '700', fontSize: 14, color: colors.ink, textAlign: 'right' },
-  loc: { fontSize: 11.5, color: colors.muted, textAlign: 'right', marginTop: 4 },
-  bottomRow: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
+  title: { fontWeight: '700', fontSize: 14, color: colors.ink, textAlign: dir.align },
+  loc: { fontSize: 11.5, color: colors.muted, textAlign: dir.align, marginTop: 4 },
+  bottomRow: { flexDirection: dir.row, justifyContent: 'space-between', alignItems: 'center', marginTop: 8 },
   price: { fontSize: 16, color: colors.marker, fontWeight: '900' },
   badge: { paddingHorizontal: 9, paddingVertical: 3, borderRadius: 8 },
 });

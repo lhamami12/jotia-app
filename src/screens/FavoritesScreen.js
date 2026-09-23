@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, FlatList, StyleSheet, Platform, StatusBar, ActivityIndicator } from 'react-native';
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) + 12 : 20,
     paddingBottom: 10,
-    textAlign: 'right',
+    textAlign: dir.align,
   },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
   emptyText: { color: colors.paper, opacity: 0.7 },

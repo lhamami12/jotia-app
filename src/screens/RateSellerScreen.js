@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, StatusBar, Alert } from 'react-native';
@@ -82,11 +83,11 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) : 0,
     marginBottom: 4,
-    textAlign: 'right',
+    textAlign: dir.align,
   },
-  sellerName: { color: colors.paper, fontSize: 14, opacity: 0.75, marginBottom: 24, textAlign: 'right' },
-  label: { color: colors.paper, fontSize: 13, fontWeight: '700', marginBottom: 10, textAlign: 'right' },
-  starsRow: { flexDirection: 'row-reverse', gap: 6, marginBottom: 24 },
+  sellerName: { color: colors.paper, fontSize: 14, opacity: 0.75, marginBottom: 24, textAlign: dir.align },
+  label: { color: colors.paper, fontSize: 13, fontWeight: '700', marginBottom: 10, textAlign: dir.align },
+  starsRow: { flexDirection: dir.row, gap: 6, marginBottom: 24 },
   star: { fontSize: 36, color: colors.muted },
   starActive: { color: colors.mustard },
   input: { backgroundColor: colors.paper, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 10, fontSize: 14, color: colors.ink, marginBottom: 20 },

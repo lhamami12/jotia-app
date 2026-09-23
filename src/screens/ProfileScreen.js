@@ -1,3 +1,4 @@
+import { dir, isRTL } from '../i18n';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, StatusBar, TextInput, Alert, ScrollView } from 'react-native';
@@ -115,7 +116,7 @@ export default function ProfileScreen() {
         </View>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.getParent()?.navigate('MyListings')}>
-          <Text style={styles.chevron}>‹</Text>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.myListings', { count: listingsCount })}</Text>
             <Text style={styles.cardSub}>{listingsCount === 0 ? t('profile.myListingsEmpty') : t('profile.myListingsCount', { count: listingsCount })}</Text>
@@ -123,7 +124,7 @@ export default function ProfileScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Favorites')}>
-          <Text style={styles.chevron}>‹</Text>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.favorites', { count: favoritesCount })}</Text>
           </View>
@@ -132,28 +133,28 @@ export default function ProfileScreen() {
         <Text style={styles.groupLabel}>{t('profile.settingsLabel')}</Text>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Settings')}>
-          <Text style={styles.chevron}>‹</Text>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.settingsItem')}</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Privacy')}>
-          <Text style={styles.chevron}>‹</Text>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.privacy')}</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('About')}>
-          <Text style={styles.chevron}>‹</Text>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.about')}</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Contact')}>
-          <Text style={styles.chevron}>‹</Text>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.contact')}</Text>
           </View>
@@ -161,7 +162,7 @@ export default function ProfileScreen() {
 
         {isAdmin && (
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AdminReports')}>
-            <Text style={styles.chevron}>‹</Text>
+            <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
             <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>{t('profile.adminPanel')}</Text>
             </View>
@@ -170,7 +171,7 @@ export default function ProfileScreen() {
 
         {isAdmin && (
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AdminUsers')}>
-            <Text style={styles.chevron}>‹</Text>
+            <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
             <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>{t('profile.adminUsers')}</Text>
             </View>
@@ -205,18 +206,18 @@ const styles = StyleSheet.create({
   guestSub: { color: colors.paper, fontSize: 13, opacity: 0.7, textAlign: 'center' },
   loginBtn: { backgroundColor: colors.marker, paddingHorizontal: 28, paddingVertical: 12, borderRadius: 12, marginTop: 10 },
   loginBtnText: { color: colors.paper, fontWeight: '700' },
-  userCard: { flexDirection: 'row-reverse', alignItems: 'center', gap: 14, backgroundColor: colors.kraft, borderRadius: 16, padding: 16 },
-  phoneText: { fontWeight: '900', fontSize: 16, color: colors.ink, textAlign: 'right' },
-  newBadge: { fontSize: 11.5, color: colors.muted, textAlign: 'right', marginTop: 2 },
-  editRow: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8 },
+  userCard: { flexDirection: dir.row, alignItems: 'center', gap: 14, backgroundColor: colors.kraft, borderRadius: 16, padding: 16 },
+  phoneText: { fontWeight: '900', fontSize: 16, color: colors.ink, textAlign: dir.align },
+  newBadge: { fontSize: 11.5, color: colors.muted, textAlign: dir.align, marginTop: 2 },
+  editRow: { flexDirection: dir.row, alignItems: 'center', gap: 8 },
   nameInput: { flex: 1, backgroundColor: colors.paper, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 6, fontSize: 14, color: colors.ink },
   saveNameBtn: { backgroundColor: colors.marker, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 10 },
   saveNameBtnText: { color: colors.paper, fontWeight: '700', fontSize: 12 },
-  groupLabel: { color: colors.paper, opacity: 0.6, fontSize: 12.5, fontWeight: '700', marginTop: 20, marginBottom: 6, textAlign: 'right' },
-  card: { flexDirection: 'row-reverse', alignItems: 'center', backgroundColor: colors.paper, borderRadius: 16, padding: 14, marginTop: 12 },
+  groupLabel: { color: colors.paper, opacity: 0.6, fontSize: 12.5, fontWeight: '700', marginTop: 20, marginBottom: 6, textAlign: dir.align },
+  card: { flexDirection: dir.row, alignItems: 'center', backgroundColor: colors.paper, borderRadius: 16, padding: 14, marginTop: 12 },
   cardContent: { flex: 1 },
-  cardTitle: { fontWeight: '700', fontSize: 13.5, color: colors.ink, textAlign: 'right' },
-  cardSub: { fontSize: 11.5, color: colors.muted, textAlign: 'right', marginTop: 2 },
-  chevron: { fontSize: 18, color: colors.muted, marginLeft: 8 },
+  cardTitle: { fontWeight: '700', fontSize: 13.5, color: colors.ink, textAlign: dir.align },
+  cardSub: { fontSize: 11.5, color: colors.muted, textAlign: dir.align, marginTop: 2 },
+  chevron: { fontSize: 18, color: colors.muted, marginHorizontal: 8 },
   versionText: { textAlign: 'center', color: colors.paper, opacity: 0.4, fontSize: 11, marginTop: 24, marginBottom: 12 },
 });

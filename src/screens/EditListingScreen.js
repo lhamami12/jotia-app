@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Platform, StatusBar, ScrollView, Alert } from 'react-native';
@@ -100,10 +101,10 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) : 0,
     marginBottom: 4,
-    textAlign: 'right',
+    textAlign: dir.align,
   },
-  title: { color: colors.paper, fontSize: 14, opacity: 0.7, marginBottom: 20, textAlign: 'right' },
-  label: { color: colors.paper, fontSize: 13, fontWeight: '700', marginBottom: 6, textAlign: 'right' },
+  title: { color: colors.paper, fontSize: 14, opacity: 0.7, marginBottom: 20, textAlign: dir.align },
+  label: { color: colors.paper, fontSize: 13, fontWeight: '700', marginBottom: 6, textAlign: dir.align },
   input: {
     backgroundColor: colors.paper,
     borderRadius: 12,

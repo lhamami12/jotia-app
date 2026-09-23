@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator } from 'react-native';
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
   header: { backgroundColor: colors.tarpDark, padding: 18 },
   brandLogo: { width: 140, height: 44, alignSelf: 'flex-start' },
-  topRow: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' },
+  topRow: { flexDirection: dir.row, justifyContent: 'space-between', alignItems: 'center' },
   brand: { fontSize: 24, fontWeight: '900', color: colors.mustard },
   locPill: { backgroundColor: 'rgba(247,243,232,.12)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
   locPillText: { color: colors.paper, fontSize: 12, fontWeight: '700' },

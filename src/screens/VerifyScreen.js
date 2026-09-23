@@ -1,3 +1,4 @@
+import { dir } from '../i18n';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
@@ -53,8 +54,8 @@ export default function VerifyScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
   form: { padding: 20, paddingTop: 60 },
-  header: { fontSize: 22, fontWeight: '900', color: colors.paper, textAlign: 'right', marginBottom: 6 },
-  sub: { color: colors.paper, fontSize: 13, opacity: 0.75, textAlign: 'right', marginBottom: 20 },
+  header: { fontSize: 22, fontWeight: '900', color: colors.paper, textAlign: dir.align, marginBottom: 6 },
+  sub: { color: colors.paper, fontSize: 13, opacity: 0.75, textAlign: dir.align, marginBottom: 20 },
   input: { backgroundColor: colors.kraft, borderRadius: 12, padding: 13, fontSize: 20, letterSpacing: 10, color: colors.ink, marginBottom: 10 },
   submitBtn: { backgroundColor: colors.marker, padding: 16, borderRadius: 14, alignItems: 'center', marginTop: 10 },
   submitText: { color: colors.paper, fontWeight: '900', fontSize: 15 },
