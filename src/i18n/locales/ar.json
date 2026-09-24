@@ -33,7 +33,8 @@
     "phoneRequiredMessage": "الرجاء إدخال رقم الهاتف",
     "googleTokenError": "ماقدرناش نجيبو التوكن ديال Google",
     "googleSignInError": "تعذر الدخول عبر Google.",
-    "sendCodeError": "تعذر إرسال الكود."
+    "sendCodeError": "تعذر إرسال الكود.",
+    "carrierUnavailable": "مشغّل شبكتك لا يستقبل رسائل التحقق حالياً. يرجى تسجيل الدخول بحساب Google أو المحاولة لاحقاً."
   },
   "profile": {
     "title": "حسابي",

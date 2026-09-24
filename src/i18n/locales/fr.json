@@ -33,7 +33,8 @@
     "phoneRequiredMessage": "Veuillez entrer votre numéro de téléphone",
     "googleTokenError": "Impossible de récupérer le token Google",
     "googleSignInError": "Échec de la connexion via Google.",
-    "sendCodeError": "Échec de l'envoi du code."
+    "sendCodeError": "Échec de l'envoi du code.",
+    "carrierUnavailable": "Votre opérateur ne peut pas recevoir de SMS de vérification pour le moment. Veuillez vous connecter avec Google ou réessayer plus tard."
   },
   "profile": {
     "title": "Mon compte",

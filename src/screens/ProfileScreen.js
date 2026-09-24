@@ -116,65 +116,65 @@ export default function ProfileScreen() {
         </View>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.getParent()?.navigate('MyListings')}>
-          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.myListings', { count: listingsCount })}</Text>
             <Text style={styles.cardSub}>{listingsCount === 0 ? t('profile.myListingsEmpty') : t('profile.myListingsCount', { count: listingsCount })}</Text>
           </View>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Favorites')}>
-          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.favorites', { count: favoritesCount })}</Text>
           </View>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
         </TouchableOpacity>
 
         <Text style={styles.groupLabel}>{t('profile.settingsLabel')}</Text>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Settings')}>
-          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.settingsItem')}</Text>
           </View>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Privacy')}>
-          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.privacy')}</Text>
           </View>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('About')}>
-          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.about')}</Text>
           </View>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Contact')}>
-          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>{t('profile.contact')}</Text>
           </View>
+          <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
         </TouchableOpacity>
 
         {isAdmin && (
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AdminReports')}>
-            <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
             <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>{t('profile.adminPanel')}</Text>
             </View>
+            <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           </TouchableOpacity>
         )}
 
         {isAdmin && (
           <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('AdminUsers')}>
-            <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
             <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>{t('profile.adminUsers')}</Text>
             </View>
+            <Text style={styles.chevron}>{isRTL ? '‹' : '›'}</Text>
           </TouchableOpacity>
         )}
 

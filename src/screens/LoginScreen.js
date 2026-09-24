@@ -50,7 +50,12 @@ export default function LoginScreen({ navigation }) {
       navigation.navigate('Verify', { confirmation, phone: formatted });
     } catch (error) {
       setSending(false);
-      Alert.alert(t('login.errorTitle'), t('login.sendCodeError') + '\n' + error.code + '\n' + String(error.nativeErrorMessage) + '\n' + error.message);
+      const raw = String(error?.message || '') + ' ' + String(error?.nativeErrorMessage || '');
+      if (raw.includes('code:39') || raw.includes('code: 39')) {
+        Alert.alert(t('login.errorTitle'), t('login.carrierUnavailable'));
+      } else {
+        Alert.alert(t('login.errorTitle'), t('login.sendCodeError') + '\n' + (error?.code || ''));
+      }
     }
   };
 
