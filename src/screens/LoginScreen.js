@@ -75,7 +75,7 @@ export default function LoginScreen({ navigation }) {
           placeholder={t('login.phonePlaceholder')}
           placeholderTextColor={colors.muted}
           keyboardType="phone-pad"
-          textAlign="right"
+          textAlign={dir.align}
         />
         <TouchableOpacity style={styles.submitBtn} onPress={sendCode} disabled={sending}>
           <Text style={styles.submitText}>{sending ? t('login.sending') : t('login.sendCode')}</Text>

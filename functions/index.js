@@ -160,3 +160,51 @@ exports.onDeletionRequest = onDocumentCreated(
     console.log('Account deleted:', uid, '- listings:', listingIds.length);
   }
 );
+
+
+// Cloud Function: صفحة ويب لكل إعلان (مع معاينة WhatsApp)
+const { onRequest } = require('firebase-functions/v2/https');
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const PLAY_URL = 'https://play.google.com/store/apps/details?id=com.jotia.app';
+
+exports.listingPage = onRequest({ region: 'europe-west1' }, async (req, res) => {
+  const id = ((req.path.split('/l/')[1] || '').split('/')[0] || '').trim();
+  let l = null;
+  if (/^[A-Za-z0-9_-]{1,64}$/.test(id)) {
+    const snap = await db.collection('listings').doc(id).get();
+    if (snap.exists && !snap.data().deleted) l = snap.data();
+  }
+  const title = l ? `${l.title} — ${l.price} DH` : 'Jotia – جوطية';
+  const desc = l ? `${l.city ? '📍 ' + l.city + ' · ' : ''}${String(l.desc || '').slice(0, 150)}` : 'بيع، شري وتبادل قريب منك';
+  const img = l ? ((l.imageUrls && l.imageUrls[0]) || l.imageUrl || '') : '';
+  const url = `https://jotia-app.web.app/l/${id}`;
+  const intent = `intent://l/${id}#Intent;scheme=jotia;package=com.jotia.app;S.browser_fallback_url=${encodeURIComponent(PLAY_URL)};end`;
+
+  res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
+  res.status(l ? 200 : 404).send(`<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(title)}</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Jotia – جوطية">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="${esc(url)}">
+${img ? `<meta property="og:image" content="${esc(img)}">` : ''}
+<link rel="stylesheet" href="/style.css">
+<style>.photo{width:100%;border-radius:14px;max-height:420px;object-fit:cover}.price{color:#d9a441;font-size:26px;font-weight:900;margin:6px 0}.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn2{display:inline-block;border:1.5px solid #d9a441;color:#d9a441;padding:10px 18px;border-radius:12px;text-decoration:none;font-weight:700}</style>
+</head><body><main>
+${l ? `
+${img ? `<img class="photo" src="${esc(img)}" alt="">` : ''}
+<h1>${esc(l.title)}</h1>
+<div class="price">${esc(l.price)} DH</div>
+${l.city ? `<p>📍 ${esc(l.city)}</p>` : ''}
+${l.desc ? `<p>${esc(l.desc)}</p>` : ''}
+` : `<h1>هذا الإعلان لم يعد متوفراً</h1><p>Cette annonce n'existe plus.</p>`}
+<div class="row">
+<a class="btn" href="${esc(intent)}">📱 فتح في التطبيق · Ouvrir</a>
+<a class="btn2" href="${PLAY_URL}">⬇️ Google Play</a>
+</div>
+<p class="muted" style="margin-top:28px">Jotia – جوطية · <a href="/privacy">Confidentialité</a></p>
+</main></body></html>`);
+});

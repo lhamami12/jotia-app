@@ -58,7 +58,7 @@ export default function ListingDetailScreen({ route, navigation }) {
     try {
       const locLine = listing.city ? `📍 ${listing.city}\n` : '';
       await Share.share({
-        message: t('detail.shareMessage', { emoji: listing.emoji, title: listing.title, price: listing.price, locLine }),
+        message: t('detail.shareMessage', { emoji: listing.emoji, title: listing.title, price: listing.price, locLine }) + `\nhttps://jotia-app.web.app/l/${listing.id}`,
       });
     } catch (e) {}
   };

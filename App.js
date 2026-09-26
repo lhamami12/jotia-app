@@ -12,6 +12,7 @@ import MainTabs from './src/navigation/MainTabs';
 import SettingsScreen from './src/screens/SettingsScreen';
 import PrivacyScreen from './src/screens/PrivacyScreen';
 import ListingDetailScreen from './src/screens/ListingDetailScreen';
+import ListingLinkScreen from './src/screens/ListingLinkScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import VerifyScreen from './src/screens/VerifyScreen';
 import ChatScreen from './src/screens/ChatScreen';
@@ -52,6 +53,11 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+const linking = {
+  prefixes: ['https://jotia-app.web.app', 'jotia://'],
+  config: { screens: { ListingLink: 'l/:id' } },
+};
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [savedCity, setSavedCity] = useState(null);
@@ -71,7 +77,7 @@ export default function App() {
     <SafeAreaProvider>
     <ErrorBoundary>
       <AuthProvider>
-        <NavigationContainer>
+        <NavigationContainer linking={linking}>
           <StatusBar style="light" />
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
@@ -81,6 +87,8 @@ export default function App() {
             <Stack.Screen name="City" component={CityScreen} />
             <Stack.Screen name="MainTabs" component={MainTabs} initialParams={{ city: savedCity }} />
             <Stack.Screen name="ListingDetail" component={ListingDetailScreen} options={{ presentation: 'modal' }} />
+
+            <Stack.Screen name="ListingLink" component={ListingLinkScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Login" component={LoginScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Verify" component={VerifyScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Chat" component={ChatScreen} options={{ presentation: 'modal' }} />

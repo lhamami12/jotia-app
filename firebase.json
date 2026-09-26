@@ -19,7 +19,27 @@
     "cleanUrls": true,
     "ignore": [
       "firebase.json",
-      "**/.*"
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/l/**",
+        "function": {
+          "functionId": "listingPage",
+          "region": "europe-west1"
+        }
+      }
+    ],
+    "headers": [
+      {
+        "source": "/.well-known/assetlinks.json",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
+      }
     ]
   }
 }

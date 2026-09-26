@@ -18,7 +18,7 @@
     "french": "Français"
   },
   "login": {
-    "back": "Retour →",
+    "back": "← Retour",
     "header": "Connexion / Inscription",
     "sub": "Entrez votre numéro de téléphone",
     "phoneLabel": "Numéro de téléphone",
@@ -307,7 +307,7 @@
     "بئر أنزران": "Bir Anzarane"
   },
   "cityScreen": {
-    "back": "→ Retour aux régions",
+    "back": "← Retour aux régions",
     "subtitle": "Choisissez la ville pour voir les annonces et les jotias qui s'y trouvent",
     "enter": "Entrer ›"
   },
@@ -459,5 +459,9 @@
     "doneMsg": "Votre compte et vos données sont en cours de suppression.",
     "errorTitle": "Erreur",
     "errorMsg": "La suppression a échoué. Vérifiez votre connexion et réessayez."
+  },
+  "link": {
+    "notFound": "Cette annonce n'existe plus.",
+    "home": "Retour à l'accueil"
   }
 }
