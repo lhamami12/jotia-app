@@ -1,7 +1,8 @@
 import { dir } from '../i18n';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import auth from '@react-native-firebase/auth';
 import { colors } from '../theme/theme';
 import { useTranslation } from 'react-i18next';
 
@@ -9,9 +10,26 @@ export default function VerifyScreen({ route, navigation }) {
   const { confirmation, phone } = route.params;
   const [code, setCode] = useState('');
   const [checking, setChecking] = useState(false);
+  const done = useRef(false);
   const { t } = useTranslation();
 
+  const goHome = () => {
+    if (done.current) return;
+    done.current = true;
+    setChecking(false);
+    navigation.navigate('MainTabs');
+  };
+
+  // Android peut lire le SMS et connecter l'utilisateur automatiquement
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged((user) => {
+      if (user) goHome();
+    });
+    return unsubscribe;
+  }, []);
+
   const confirmCode = async () => {
+    if (auth().currentUser) { goHome(); return; }
     if (!code.trim()) {
       Alert.alert(t('verify.alertTitle'), t('verify.alertMsg'));
       return;
@@ -19,12 +37,17 @@ export default function VerifyScreen({ route, navigation }) {
     setChecking(true);
     try {
       await confirmation.confirm(code.trim());
-      // onAuthStateChanged فـ AuthContext غادي يتكلف تلقائياً بتحديث حالة الدخول
-      setChecking(false);
-      navigation.navigate('MainTabs');
+      goHome();
     } catch (error) {
+      // Déjà connecté automatiquement : ce n'est pas une vraie erreur
+      if (auth().currentUser) { goHome(); return; }
       setChecking(false);
-      Alert.alert(t('verify.errorTitle'), t('verify.errorMsg'));
+      const c = error?.code || '';
+      if (c === 'auth/session-expired' || c === 'auth/code-expired') {
+        Alert.alert(t('verify.errorTitle'), t('verify.expiredMsg'));
+      } else {
+        Alert.alert(t('verify.errorTitle'), t('verify.errorMsg'));
+      }
     }
   };
 
@@ -42,6 +65,8 @@ export default function VerifyScreen({ route, navigation }) {
           keyboardType="number-pad"
           textAlign="center"
           maxLength={6}
+          autoComplete="sms-otp"
+          textContentType="oneTimeCode"
         />
         <TouchableOpacity style={styles.submitBtn} onPress={confirmCode} disabled={checking}>
           <Text style={styles.submitText}>{checking ? t('verify.checking') : t('verify.confirm')}</Text>
