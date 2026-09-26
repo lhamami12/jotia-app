@@ -1,5 +1,6 @@
 import { dir } from '../i18n';
 import React, { useState, useEffect } from 'react';
+import DeleteAccountButton from '../components/DeleteAccountButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, StyleSheet, Switch, ScrollView, Alert, Platform, StatusBar, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -141,6 +142,7 @@ export default function SettingsScreen() {
 
         <Text style={styles.groupLabel}>{t('settings.language')}</Text>
         <LanguageSelector />
+        <DeleteAccountButton />
       </ScrollView>
     </SafeAreaView>
   );

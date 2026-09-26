@@ -447,5 +447,17 @@
     "successMsg": "Votre évaluation a été enregistrée avec succès",
     "errorTitle": "Erreur",
     "errorMsg": "Impossible d'enregistrer l'évaluation.\n{{error}}"
+  },
+  "deleteAccount": {
+    "button": "Supprimer mon compte",
+    "hint": "Votre compte, vos annonces, vos messages et vos favoris seront supprimés définitivement.",
+    "confirmTitle": "Supprimer votre compte ?",
+    "confirmMsg": "Cette action est définitive. Votre compte, vos annonces, vos photos, vos messages et vos favoris seront supprimés.",
+    "cancel": "Annuler",
+    "confirm": "Supprimer",
+    "doneTitle": "Compte supprimé",
+    "doneMsg": "Votre compte et vos données sont en cours de suppression.",
+    "errorTitle": "Erreur",
+    "errorMsg": "La suppression a échoué. Vérifiez votre connexion et réessayez."
   }
 }

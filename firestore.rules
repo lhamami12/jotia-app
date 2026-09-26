@@ -1,6 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Demande de suppression de compte : seul le propriétaire peut la créer
+    match /deletionRequests/{uid} {
+      allow create: if request.auth != null && request.auth.uid == uid;
+      allow read, update, delete: if false;
+    }
     match /listings/{listingId} {
       allow read: if true;
       allow create: if request.auth != null;
