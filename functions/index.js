@@ -136,7 +136,7 @@ exports.onDeletionRequest = onDocumentCreated(
     }
 
     // 3. Conversations (avec messages)
-    await deleteQuery(db.collection('conversations').where('participants', 'array-contains', uid));
+    for (const c of (await db.collection('conversations').where('participants', 'array-contains', uid).get()).docs) await db.recursiveDelete(c.ref);
 
     // 4. Avis
     await deleteQuery(db.collection('reviews').where('buyerId', '==', uid));
