@@ -21,7 +21,7 @@ export default function SettingsScreen() {
       if (!user?.uid) return;
       try {
         const snap = await db.collection('users').doc(user.uid).get();
-        if (snap.exists) {
+        if (snap.exists()) {
           const data = snap.data();
           if (data.notificationsEnabled !== undefined) {
             setNotificationsEnabled(data.notificationsEnabled);

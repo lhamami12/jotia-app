@@ -13,7 +13,7 @@ export async function getOrCreateConversation({ listingId, listingTitle, listing
   const ref = db.collection('conversations').doc(conversationId);
   const snap = await ref.get();
 
-  if (!snap.exists) {
+  if (!snap.exists()) {
     await ref.set({
       listingId, listingTitle, listingEmoji,
       sellerId, sellerPhone, sellerName: sellerName || null,
@@ -31,9 +31,15 @@ export async function getOrCreateConversation({ listingId, listingTitle, listing
 // Live listener for messages in a given conversation
 export function subscribeToMessages(conversationId, callback) {
   const messagesRef = db.collection('conversations').doc(conversationId).collection('messages');
-  return messagesRef.orderBy('createdAt', 'asc').onSnapshot((snapshot) => {
-    callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
-  });
+  return messagesRef.orderBy('createdAt', 'asc').onSnapshot(
+    (snapshot) => {
+      if (!snapshot) return;
+      callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+    },
+    (error) => {
+      console.log('Error fetching messages:', error.message);
+    }
+  );
 }
 
 // Send a message (plain text, or a price offer 💰, or a meeting point 🛡️)
@@ -43,7 +49,7 @@ export async function sendMessage(conversationId, senderId, text, senderName) {
 
   const convoRef = db.collection('conversations').doc(conversationId);
   const convoSnap = await convoRef.get();
-  const recipientId = convoSnap.exists
+  const recipientId = convoSnap.exists()
     ? (convoSnap.data().sellerId === senderId ? convoSnap.data().buyerId : convoSnap.data().sellerId)
     : null;
 

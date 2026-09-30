@@ -111,5 +111,5 @@ export function subscribeToAllListings(callback) {
 
 export async function getListingById(listingId) {
   const snap = await listingsRef.doc(listingId).get();
-  return snap.exists ? { id: snap.id, ...snap.data() } : null;
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
 }

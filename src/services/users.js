@@ -9,7 +9,7 @@ export async function updateUserDisplayName(userId, displayName) {
 // Get a user's profile once (no live listener)
 export async function getUserProfile(userId) {
   const snap = await db.collection('users').doc(userId).get();
-  return snap.exists ? snap.data() : null;
+  return snap.exists() ? snap.data() : null;
 }
 
 // Block / unblock a user account (admin only)
@@ -45,6 +45,6 @@ export async function searchUserByContact(value) {
 // Live listener on a user's blocked status (to force logout instantly if blocked)
 export function subscribeToUserProfile(userId, callback) {
   return db.collection('users').doc(userId).onSnapshot((snap) => {
-    callback(snap.exists ? snap.data() : null);
+    callback(snap.exists() ? snap.data() : null);
   });
 }
