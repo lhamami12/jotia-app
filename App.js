@@ -26,6 +26,7 @@ import AdminUsersScreen from './src/screens/AdminUsersScreen';
 import RateSellerScreen from './src/screens/RateSellerScreen';
 import FavoritesScreen from './src/screens/FavoritesScreen';
 import { AuthProvider } from './src/context/AuthContext';
+import UpdateGate from './src/components/UpdateGate';
 import { colors } from './src/theme/theme';
 
 const Stack = createNativeStackNavigator();
@@ -76,6 +77,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
     <ErrorBoundary>
+      <UpdateGate>
       <AuthProvider>
         <NavigationContainer linking={linking}>
           <StatusBar style="light" />
@@ -106,6 +108,7 @@ export default function App() {
 </Stack.Navigator>
         </NavigationContainer>
       </AuthProvider>
+      </UpdateGate>
     </ErrorBoundary>
     </SafeAreaProvider>
   );

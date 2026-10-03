@@ -466,5 +466,10 @@
   "link": {
     "notFound": "Cette annonce n'existe plus.",
     "home": "Retour à l'accueil"
+  },
+  "update": {
+    "title": "Nouvelle mise à jour disponible",
+    "message": "Cette version de Jotia n'est plus prise en charge. Veuillez mettre à jour l'application depuis Google Play pour continuer.",
+    "button": "Mettre à jour"
   }
 }
