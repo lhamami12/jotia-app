@@ -147,7 +147,7 @@ export default function ListingDetailScreen({ route, navigation }) {
         {listing.city ? <Text style={styles.loc}>📍 {listing.city}</Text> : null}
 
         <View style={styles.sellerRow}>
-          <View style={styles.avatar}><Text style={{ color: colors.mustard, fontWeight: '900' }}>ن</Text></View>
+          <View style={[styles.avatar, { backgroundColor: avatarColor(listing.userId) }]}><Text style={{ color: '#FFFFFF', fontWeight: '900', fontSize: 18 }}>{initialOf(sellerName)}</Text></View>
           <View>
             <Text style={styles.sellerName}>{sellerName}</Text>
             <Text style={styles.sellerSub}>
@@ -274,3 +274,17 @@ const styles = StyleSheet.create({
   reviewAuthor: { fontWeight: '700', fontSize: 12.5, color: colors.ink },
   reviewComment: { fontSize: 12.5, color: '#4a4238', textAlign: dir.align, marginTop: 6, lineHeight: 18 },
 });
+
+const AVATAR_COLORS = ['#1F3A47', '#C0392B', '#D9A441', '#2E7D5B', '#6C4A8B', '#B5651D', '#2C6E91', '#8E3B46'];
+
+function avatarColor(id) {
+  const str = String(id || '');
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+  return AVATAR_COLORS[h % AVATAR_COLORS.length];
+}
+
+function initialOf(name) {
+  const first = Array.from(String(name || '').trim())[0];
+  return first ? first.toUpperCase() : '👤';
+}
