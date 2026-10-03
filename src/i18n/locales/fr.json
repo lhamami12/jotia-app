@@ -164,7 +164,14 @@
     "safeSpotBtn": "🛡️ Point de rendez-vous",
     "inputPlaceholder": "Écrivez votre message...",
     "sendErrorTitle": "Erreur",
-    "sendError": "Impossible d'envoyer le message. Vérifiez votre connexion et réessayez."
+    "sendError": "Impossible d'envoyer le message. Vérifiez votre connexion et réessayez.",
+    "blockTitle": "Bloquer l'utilisateur",
+    "block": "Bloquer",
+    "unblock": "Débloquer",
+    "cancel": "Annuler",
+    "blockConfirm": "Vous ne recevrez plus de notifications de cet utilisateur et la conversation disparaîtra de votre liste. Continuer ?",
+    "unblockConfirm": "Débloquer cet utilisateur ?",
+    "blockedBanner": "Vous avez bloqué cet utilisateur. Appuyez sur ⋮ pour le débloquer."
   },
   "detail": {
     "defaultSeller": "Vendeur Jotia",

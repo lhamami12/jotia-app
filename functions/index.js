@@ -23,6 +23,10 @@ exports.onNewMessage = onDocumentCreated('conversations/{conversationId}/message
   console.log('Recipient:', recipientId);
 
   const userSnap = await db.collection('users').doc(recipientId).get();
+  if (userSnap.exists && (userSnap.data().blockedUsers || []).includes(message.senderId)) {
+    console.log('Sender blocked by recipient, no push');
+    return;
+  }
   const pushToken = userSnap.exists ? userSnap.data().pushToken : null;
   if (!pushToken) { console.log('No pushToken for recipient', recipientId); return; }
   console.log('Sending push to token:', pushToken);

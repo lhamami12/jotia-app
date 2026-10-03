@@ -1,3 +1,4 @@
+import firestore from '@react-native-firebase/firestore';
 // User profile functions (display name, admin status, etc.)
 import { db } from './firebase';
 
@@ -47,4 +48,12 @@ export function subscribeToUserProfile(userId, callback) {
   return db.collection('users').doc(userId).onSnapshot((snap) => {
     callback(snap.exists() ? snap.data() : null);
   });
+}
+
+export async function blockUser(myId, otherId) {
+  await db.collection('users').doc(myId).set({ blockedUsers: firestore.FieldValue.arrayUnion(otherId) }, { merge: true });
+}
+
+export async function unblockUser(myId, otherId) {
+  await db.collection('users').doc(myId).set({ blockedUsers: firestore.FieldValue.arrayRemove(otherId) }, { merge: true });
 }

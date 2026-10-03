@@ -6,6 +6,8 @@ import { colors } from '../theme/theme';
 import { useAuth } from '../context/AuthContext';
 import { subscribeToMessages, sendMessage, markConversationAsRead } from '../services/chat';
 import { useTranslation } from 'react-i18next';
+import { db } from '../services/firebase';
+import { blockUser, unblockUser } from '../services/users';
 
 
 
@@ -34,9 +36,45 @@ export default function ChatScreen({ route, navigation }) {
     }
   }, [conversationId, user]);
 
+  const [otherId, setOtherId] = useState(null);
+  const [blocked, setBlocked] = useState(false);
+
+  useEffect(() => {
+    db.collection('conversations').doc(conversationId).get()
+      .then((snap) => {
+        if (!snap.exists()) return;
+        const c = snap.data();
+        setOtherId(c.sellerId === user?.uid ? c.buyerId : c.sellerId);
+      })
+      .catch(() => {});
+  }, [conversationId, user]);
+
+  useEffect(() => {
+    if (!user || !otherId) return;
+    return db.collection('users').doc(user.uid).onSnapshot(
+      (snap) => setBlocked(!!(snap && snap.exists() && (snap.data().blockedUsers || []).includes(otherId))),
+      () => {}
+    );
+  }, [user, otherId]);
+
+  const toggleBlock = () => {
+    if (!user || !otherId) return;
+    if (blocked) {
+      Alert.alert(t('chat.unblock'), t('chat.unblockConfirm'), [
+        { text: t('chat.cancel'), style: 'cancel' },
+        { text: t('chat.unblock'), onPress: () => unblockUser(user.uid, otherId).catch(() => {}) },
+      ]);
+    } else {
+      Alert.alert(t('chat.blockTitle'), t('chat.blockConfirm'), [
+        { text: t('chat.cancel'), style: 'cancel' },
+        { text: t('chat.block'), style: 'destructive', onPress: () => blockUser(user.uid, otherId).then(() => navigation.goBack()).catch(() => {}) },
+      ]);
+    }
+  };
+
   const send = async (content) => {
     const value = (content ?? text).trim();
-    if (!value) return;
+    if (!value || blocked) return;
     setText('');
     const myName = user.displayName || null;
     try {
@@ -56,7 +94,17 @@ export default function ChatScreen({ route, navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()}><Text style={styles.headerBack}>{isRTL ? '→' : '←'}</Text></TouchableOpacity>
         <View style={styles.avatar}><Text>👤</Text></View>
         <Text style={styles.headerName}>{otherName || otherPhone || t('chat.defaultUserName')}</Text>
+        {!!otherId && (
+          <TouchableOpacity onPress={toggleBlock} style={{ marginStart: 'auto', paddingHorizontal: 12, paddingVertical: 4 }}>
+            <Text style={{ color: '#E8DCC4', fontSize: 24, fontWeight: '800' }}>⋮</Text>
+          </TouchableOpacity>
+        )}
       </View>
+      {blocked && (
+        <View style={{ backgroundColor: '#E8DCC4', padding: 12, margin: 12, borderRadius: 12 }}>
+          <Text style={{ color: '#1F3A47', textAlign: 'center', fontWeight: '700' }}>{t('chat.blockedBanner')}</Text>
+        </View>
+      )}
 
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <FlatList

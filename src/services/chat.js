@@ -80,13 +80,23 @@ export async function deleteConversationForUser(conversationId, userId) {
 
 // All conversations for a given user (to fill the "Messages" tab)
 export function subscribeToMyConversations(userId, callback) {
+  let all = [];
+  let blocked = [];
+  const emit = () => callback(all.filter((c) =>
+    !(c.deletedBy || []).includes(userId) &&
+    !(c.participants || []).some((p) => p !== userId && blocked.includes(p))));
+  const unsubUser = db.collection('users').doc(userId).onSnapshot((snap) => {
+    blocked = (snap && snap.exists() && snap.data().blockedUsers) || [];
+    emit();
+  }, () => {});
   const q = db.collection('conversations').where('participants', 'array-contains', userId).orderBy('lastMessageAt', 'desc');
-  return q.onSnapshot((snapshot) => {
-    const all = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-    const visible = all.filter((c) => !(c.deletedBy || []).includes(userId));
-    callback(visible);
+  const unsubConvos = q.onSnapshot((snapshot) => {
+    if (!snapshot) return;
+    all = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+    emit();
   }, (error) => {
     console.log('Error fetching conversations:', error.message);
     callback([]);
   });
+  return () => { unsubUser(); unsubConvos(); };
 }
