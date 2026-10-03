@@ -1,7 +1,7 @@
 import { dir, isRTL } from '../i18n';
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, KeyboardAvoidingView, Platform, Alert } from 'react-native';
 import { colors } from '../theme/theme';
 import { useAuth } from '../context/AuthContext';
 import { subscribeToMessages, sendMessage, markConversationAsRead } from '../services/chat';
@@ -39,7 +39,13 @@ export default function ChatScreen({ route, navigation }) {
     if (!value) return;
     setText('');
     const myName = user.displayName || null;
-    await sendMessage(conversationId, user.uid, value, myName);
+    try {
+      await sendMessage(conversationId, user.uid, value, myName);
+    } catch (e) {
+      console.log('Send error:', e?.code, e?.message);
+      if (content === undefined) setText(value);
+      Alert.alert(t('chat.sendErrorTitle'), t('chat.sendError'));
+    }
   };
 
   const basePrice = listing?.price ? parseInt(listing.price) : NaN;

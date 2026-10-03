@@ -162,7 +162,9 @@
     "suggestSpotMsg": "🛡️ اقترحت نلتقاو فـ: {{name}}",
     "offerMsg": "💰 عرضت {{amount}} DH",
     "safeSpotBtn": "🛡️ نقطة اللقاء",
-    "inputPlaceholder": "اكتب رسالتك..."
+    "inputPlaceholder": "اكتب رسالتك...",
+    "sendErrorTitle": "خطأ",
+    "sendError": "تعذّر إرسال الرسالة. تحقق من الاتصال وحاول مرة أخرى."
   },
   "detail": {
     "defaultSeller": "بائع فجوطية",

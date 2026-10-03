@@ -162,7 +162,9 @@
     "suggestSpotMsg": "🛡️ Rendez-vous suggéré à : {{name}}",
     "offerMsg": "💰 Offre de {{amount}} DH",
     "safeSpotBtn": "🛡️ Point de rendez-vous",
-    "inputPlaceholder": "Écrivez votre message..."
+    "inputPlaceholder": "Écrivez votre message...",
+    "sendErrorTitle": "Erreur",
+    "sendError": "Impossible d'envoyer le message. Vérifiez votre connexion et réessayez."
   },
   "detail": {
     "defaultSeller": "Vendeur Jotia",
