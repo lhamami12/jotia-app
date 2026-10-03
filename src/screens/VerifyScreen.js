@@ -43,7 +43,9 @@ export default function VerifyScreen({ route, navigation }) {
       if (auth().currentUser) { goHome(); return; }
       setChecking(false);
       const c = error?.code || '';
-      if (c === 'auth/session-expired' || c === 'auth/code-expired') {
+      if (c === 'auth/too-many-requests') {
+        Alert.alert(t('verify.errorTitle'), t('login.tooManyRequests'));
+      } else if (c === 'auth/session-expired' || c === 'auth/code-expired') {
         Alert.alert(t('verify.errorTitle'), t('verify.expiredMsg'));
       } else {
         Alert.alert(t('verify.errorTitle'), t('verify.errorMsg'));

@@ -34,7 +34,8 @@
     "googleTokenError": "Impossible de récupérer le token Google",
     "googleSignInError": "Échec de la connexion via Google.",
     "sendCodeError": "Échec de l'envoi du code.",
-    "carrierUnavailable": "Votre opérateur ne peut pas recevoir de SMS de vérification pour le moment. Veuillez vous connecter avec Google ou réessayer plus tard."
+    "carrierUnavailable": "Votre opérateur ne peut pas recevoir de SMS de vérification pour le moment. Veuillez vous connecter avec Google ou réessayer plus tard.",
+    "tooManyRequests": "Trop de tentatives. Veuillez patienter un moment avant de réessayer, ou connectez-vous avec Google."
   },
   "profile": {
     "title": "Mon compte",

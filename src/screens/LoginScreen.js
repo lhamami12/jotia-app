@@ -51,7 +51,9 @@ export default function LoginScreen({ navigation }) {
     } catch (error) {
       setSending(false);
       const raw = String(error?.message || '') + ' ' + String(error?.nativeErrorMessage || '');
-      if (raw.includes('code:39') || raw.includes('code: 39')) {
+      if (error?.code === 'auth/too-many-requests' || raw.includes('too-many-requests')) {
+        Alert.alert(t('login.errorTitle'), t('login.tooManyRequests'));
+      } else if (raw.includes('code:39') || raw.includes('code: 39')) {
         Alert.alert(t('login.errorTitle'), t('login.carrierUnavailable'));
       } else {
         Alert.alert(t('login.errorTitle'), t('login.sendCodeError') + '\n' + (error?.code || ''));
