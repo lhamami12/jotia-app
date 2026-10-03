@@ -34,7 +34,12 @@ const Stack = createNativeStackNavigator();
 if (global.ErrorUtils) {
   const defaultHandler = global.ErrorUtils.getGlobalHandler();
   global.ErrorUtils.setGlobalHandler((error, isFatal) => {
-    Alert.alert(isFatal ? 'خطأ فادح' : 'خطأ', String(error && error.message ? error.message : error));
+    const detail = String(error && error.message ? error.message : error);
+    console.log('Global error:', isFatal, detail);
+    if (isFatal) {
+      Alert.alert('خطأ / Erreur',
+        "حدث خطأ غير متوقع. يرجى إعادة تشغيل التطبيق.\nUne erreur inattendue s'est produite. Veuillez redémarrer l'application.\n\n" + detail);
+    }
   });
 }
 
