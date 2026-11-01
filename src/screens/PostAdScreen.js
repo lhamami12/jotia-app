@@ -1,7 +1,8 @@
 import { dir } from '../i18n';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Image, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Image, ActivityIndicator, Modal } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
 import { colors } from '../theme/theme';
@@ -30,6 +31,7 @@ export default function PostAdScreen() {
   const city = route.params?.city || t('post.cityUnknown');
 
   const [title, setTitle] = useState('');
+  const [catOpen, setCatOpen] = useState(false);
   const [cat, setCat] = useState(categories[1]); // أول فئة حقيقية (بعد "الكل")
   const [type, setType] = useState('sale'); // sale | trade | both
   const [scope, setScope] = useState('city'); // city | region
@@ -160,13 +162,26 @@ export default function PostAdScreen() {
         <TextInput style={styles.input} value={title} onChangeText={setTitle} placeholder={t('post.titlePlaceholder')} placeholderTextColor={colors.muted} textAlign="right" />
 
         <Text style={styles.label}>{t('post.categoryLabel')}</Text>
-        <View style={styles.chipsWrap}>
-          {categories.filter(c => c !== 'الكل').map((c) => (
-            <TouchableOpacity key={c} style={[styles.chip, cat === c && styles.chipActive]} onPress={() => setCat(c)}>
-              <Text style={[styles.chipText, cat === c && styles.chipTextActive]}>{t('categories.' + c, c)}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        <TouchableOpacity style={styles.catField} activeOpacity={0.8} onPress={() => setCatOpen(true)}>
+          <Text style={styles.catFieldText}>{t('categories.' + cat, cat)}</Text>
+          <Ionicons name="chevron-down" size={20} color={colors.ink} />
+        </TouchableOpacity>
+
+        <Modal visible={catOpen} transparent animationType="slide" onRequestClose={() => setCatOpen(false)}>
+          <TouchableOpacity style={styles.sheetOverlay} activeOpacity={1} onPress={() => setCatOpen(false)} />
+          <View style={styles.sheet}>
+            <View style={styles.sheetHandle} />
+            <Text style={styles.sheetTitle}>{t('post.categoryLabel')}</Text>
+            <ScrollView>
+              {categories.filter(c => c !== 'الكل').map((c) => (
+                <TouchableOpacity key={c} style={styles.sheetRow} onPress={() => { setCat(c); setCatOpen(false); }}>
+                  <Text style={[styles.sheetRowText, cat === c && styles.sheetRowTextActive]}>{t('categories.' + c, c)}</Text>
+                  {cat === c && <Ionicons name="checkmark" size={22} color={colors.marker} />}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </Modal>
 
         <Text style={styles.label}>{t('post.typeLabel')}</Text>
         <View style={styles.toggleRow}>
@@ -207,6 +222,15 @@ export default function PostAdScreen() {
 }
 
 const styles = StyleSheet.create({
+  catField: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.kraft, borderRadius: 14, paddingHorizontal: 16, paddingVertical: 14, marginTop: 6 },
+  catFieldText: { fontSize: 16, fontWeight: '700', color: colors.ink },
+  sheetOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)' },
+  sheet: { maxHeight: '70%', backgroundColor: colors.paper, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 20, paddingBottom: 24 },
+  sheetHandle: { alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: '#CFC4AE', marginTop: 10, marginBottom: 8 },
+  sheetTitle: { fontSize: 18, fontWeight: '800', color: colors.ink, marginBottom: 6, textAlign: 'center' },
+  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#E8DCC4' },
+  sheetRowText: { fontSize: 16, color: colors.ink },
+  sheetRowTextActive: { fontWeight: '800', color: colors.marker },
   container: { flex: 1, backgroundColor: colors.tarp },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8, padding: 40 },
   centerIcon: { fontSize: 40 },

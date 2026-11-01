@@ -2,6 +2,7 @@ import { dir } from '../i18n';
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, Image, FlatList, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/theme';
 import { categories } from '../data/regions';
 import ListingCard from '../components/ListingCard';
@@ -73,10 +74,14 @@ export default function HomeScreen({ route, navigation }) {
   }, [user]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
         <View style={styles.topRow}>
           <Image source={require('../../assets/logo-header.png')} style={styles.brandLogo} resizeMode="contain" />
+          <TouchableOpacity style={styles.locPill} onPress={() => navigation.getParent()?.navigate('Region')}>
+            <Text style={styles.locPillText}>📍 {city}</Text>
+            <Ionicons name="chevron-down" size={16} color={colors.paper} />
+          </TouchableOpacity>
         </View>
         <TextInput
           style={styles.search}
@@ -84,7 +89,7 @@ export default function HomeScreen({ route, navigation }) {
           placeholderTextColor={colors.muted}
           value={search}
           onChangeText={setSearch}
-          textAlign="right"
+          textAlign={dir.align}
         />
       </View>
 
@@ -96,11 +101,6 @@ export default function HomeScreen({ route, navigation }) {
           style={{ flexGrow: 0, marginTop: 12 }}
           contentContainerStyle={{ paddingHorizontal: 20, gap: 10 }}
           showsHorizontalScrollIndicator={false}
-          ListHeaderComponent={() => (
-            <TouchableOpacity style={styles.locPill} onPress={() => navigation.getParent()?.navigate('Region')}>
-              <Text style={styles.locPillText}>📍 {city} ↻</Text>
-            </TouchableOpacity>
-          )}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={[styles.chip, activeCat === item && styles.chipActive]}
@@ -141,13 +141,13 @@ export default function HomeScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.tarp },
-  header: { backgroundColor: colors.tarpDark, padding: 18 },
+  header: { backgroundColor: colors.tarpDark, paddingHorizontal: 18, paddingVertical: 14 },
   brandLogo: { width: 140, height: 44, alignSelf: 'flex-start' },
   topRow: { flexDirection: dir.row, justifyContent: 'space-between', alignItems: 'center' },
   brand: { fontSize: 24, fontWeight: '900', color: colors.mustard },
-  locPill: { backgroundColor: 'rgba(247,243,232,.12)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
-  locPillText: { color: colors.paper, fontSize: 12, fontWeight: '700' },
-  search: { marginTop: 14, backgroundColor: colors.paper, borderRadius: 12, padding: 12, fontSize: 13, color: colors.ink },
+  locPill: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(247,243,232,.12)', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20 },
+  locPillText: { color: colors.paper, fontSize: 14, fontWeight: '700' },
+  search: { marginTop: 12, backgroundColor: colors.paper, borderRadius: 12, padding: 12, fontSize: 13, color: colors.ink },
   chip: { backgroundColor: colors.kraft, paddingHorizontal: 16, paddingVertical: 9, borderRadius: 20 },
   chipActive: { backgroundColor: colors.marker },
   chipText: { fontSize: 12.5, fontWeight: '700', color: colors.ink },

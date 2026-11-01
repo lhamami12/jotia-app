@@ -101,7 +101,7 @@
   },
   "home": {
     "brand": "Jotia",
-    "searchPlaceholder": "Cherchez n'importe quoi partout au Maroc...",
+    "searchPlaceholder": "Rechercher au Maroc…",
     "noResults": "Aucun résultat pour \"{{term}}\"",
     "emptyState": "Aucune annonce pour le moment dans cette ville, soyez le premier à publier 🚀"
   },
