@@ -71,7 +71,10 @@
           "android": {
             "compileSdkVersion": 36,
             "targetSdkVersion": 36,
-            "buildToolsVersion": "36.0.0"
+            "buildToolsVersion": "36.0.0",
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "extraProguardRules": "-keep class io.invertase.firebase.** { *; }\n-keep class com.reactnativegooglesignin.** { *; }\n-dontwarn io.invertase.firebase.**"
           }
         }
       ],
