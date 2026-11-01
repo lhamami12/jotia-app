@@ -146,15 +146,17 @@ export default function ListingDetailScreen({ route, navigation }) {
         <Text style={styles.price}>{listing.price}</Text>
         {listing.city ? <Text style={styles.loc}>📍 {listing.city}</Text> : null}
 
-        <View style={styles.sellerRow}>
+        <TouchableOpacity style={styles.sellerRow} activeOpacity={0.7}
+          onPress={() => navigation.navigate('SellerStore', { sellerId: listing.userId, sellerName })}>
           <View style={[styles.avatar, { backgroundColor: avatarColor(listing.userId) }]}><Text style={{ color: '#FFFFFF', fontWeight: '900', fontSize: 18 }}>{initialOf(sellerName)}</Text></View>
           <View>
             <Text style={styles.sellerName}>{sellerName}</Text>
             <Text style={styles.sellerSub}>
               {avgRating ? `⭐ ${t('rating.sellerRating', { avg: avgRating, count: reviews.length })}` : t('rating.noRatingsYet')}
             </Text>
+            <Text style={{ color: colors.mustard, fontSize: 13, fontWeight: '700', marginTop: 2 }}>{t('store.viewStore')} ›</Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
         <Text style={styles.desc}>{listing.desc}</Text>
 

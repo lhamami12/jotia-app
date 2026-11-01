@@ -25,6 +25,7 @@ import AdminReportsScreen from './src/screens/AdminReportsScreen';
 import AdminUsersScreen from './src/screens/AdminUsersScreen';
 import RateSellerScreen from './src/screens/RateSellerScreen';
 import FavoritesScreen from './src/screens/FavoritesScreen';
+import SellerStoreScreen from './src/screens/SellerStoreScreen';
 import { AuthProvider } from './src/context/AuthContext';
 import UpdateGate from './src/components/UpdateGate';
 import { colors } from './src/theme/theme';
@@ -107,6 +108,7 @@ export default function App() {
             <Stack.Screen name="AdminReports" component={AdminReportsScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="AdminUsers" component={AdminUsersScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="RateSeller" component={RateSellerScreen} options={{ presentation: 'modal' }} />
+            <Stack.Screen name="SellerStore" component={SellerStoreScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Favorites" component={FavoritesScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Settings" component={SettingsScreen} options={{ presentation: 'modal' }} />
             <Stack.Screen name="Privacy" component={PrivacyScreen} options={{ presentation: 'modal' }} />

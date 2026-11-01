@@ -478,5 +478,11 @@
     "title": "Nouvelle mise à jour disponible",
     "message": "Cette version de Jotia n'est plus prise en charge. Veuillez mettre à jour l'application depuis Google Play pour continuer.",
     "button": "Mettre à jour"
+  },
+  "store": {
+    "title": "Boutique du vendeur",
+    "listings": "Annonces ({{count}})",
+    "empty": "Aucune annonce pour le moment",
+    "viewStore": "Voir la boutique"
   }
 }
