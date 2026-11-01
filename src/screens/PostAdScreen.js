@@ -167,12 +167,13 @@ export default function PostAdScreen() {
           <Ionicons name="chevron-down" size={20} color={colors.ink} />
         </TouchableOpacity>
 
-        <Modal visible={catOpen} transparent animationType="slide" onRequestClose={() => setCatOpen(false)}>
+        <Modal visible={catOpen} transparent animationType="fade" statusBarTranslucent onRequestClose={() => setCatOpen(false)}>
+          <View style={styles.sheetRoot}>
           <TouchableOpacity style={styles.sheetOverlay} activeOpacity={1} onPress={() => setCatOpen(false)} />
           <View style={styles.sheet}>
             <View style={styles.sheetHandle} />
             <Text style={styles.sheetTitle}>{t('post.categoryLabel')}</Text>
-            <ScrollView>
+            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 24 }}>
               {categories.filter(c => c !== 'الكل').map((c) => (
                 <TouchableOpacity key={c} style={styles.sheetRow} onPress={() => { setCat(c); setCatOpen(false); }}>
                   <Text style={[styles.sheetRowText, cat === c && styles.sheetRowTextActive]}>{t('categories.' + c, c)}</Text>
@@ -180,6 +181,7 @@ export default function PostAdScreen() {
                 </TouchableOpacity>
               ))}
             </ScrollView>
+          </View>
           </View>
         </Modal>
 
@@ -224,8 +226,9 @@ export default function PostAdScreen() {
 const styles = StyleSheet.create({
   catField: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.kraft, borderRadius: 14, paddingHorizontal: 16, paddingVertical: 14, marginTop: 6 },
   catFieldText: { fontSize: 16, fontWeight: '700', color: colors.ink },
-  sheetOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)' },
-  sheet: { maxHeight: '70%', backgroundColor: colors.paper, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 20, paddingBottom: 24 },
+  sheetRoot: { flex: 1, justifyContent: 'flex-end' },
+  sheetOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.45)' },
+  sheet: { height: '60%', backgroundColor: colors.paper, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 20, paddingBottom: 24 },
   sheetHandle: { alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: '#CFC4AE', marginTop: 10, marginBottom: 8 },
   sheetTitle: { fontSize: 18, fontWeight: '800', color: colors.ink, marginBottom: 6, textAlign: 'center' },
   sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#E8DCC4' },
