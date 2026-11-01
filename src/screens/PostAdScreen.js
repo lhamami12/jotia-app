@@ -1,7 +1,7 @@
 import { dir } from '../i18n';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Image, ActivityIndicator, Modal } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert, Image, ActivityIndicator, Modal, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
@@ -32,6 +32,8 @@ export default function PostAdScreen() {
 
   const [title, setTitle] = useState('');
   const [catOpen, setCatOpen] = useState(false);
+  const { height: winH } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const [cat, setCat] = useState(categories[1]); // أول فئة حقيقية (بعد "الكل")
   const [type, setType] = useState('sale'); // sale | trade | both
   const [scope, setScope] = useState('city'); // city | region
@@ -170,7 +172,7 @@ export default function PostAdScreen() {
         <Modal visible={catOpen} transparent animationType="fade" statusBarTranslucent onRequestClose={() => setCatOpen(false)}>
           <View style={styles.sheetRoot}>
           <TouchableOpacity style={styles.sheetOverlay} activeOpacity={1} onPress={() => setCatOpen(false)} />
-          <View style={styles.sheet}>
+          <View style={[styles.sheet, { height: Math.round(winH * 0.75), paddingBottom: insets.bottom + 12 }]}>
             <View style={styles.sheetHandle} />
             <Text style={styles.sheetTitle}>{t('post.categoryLabel')}</Text>
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 24 }}>
@@ -228,10 +230,10 @@ const styles = StyleSheet.create({
   catFieldText: { fontSize: 16, fontWeight: '700', color: colors.ink },
   sheetRoot: { flex: 1, justifyContent: 'flex-end' },
   sheetOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.45)' },
-  sheet: { height: '60%', backgroundColor: colors.paper, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 20, paddingBottom: 24 },
+  sheet: { backgroundColor: colors.paper, borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingHorizontal: 20 },
   sheetHandle: { alignSelf: 'center', width: 44, height: 5, borderRadius: 3, backgroundColor: '#CFC4AE', marginTop: 10, marginBottom: 8 },
   sheetTitle: { fontSize: 18, fontWeight: '800', color: colors.ink, marginBottom: 6, textAlign: 'center' },
-  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#E8DCC4' },
+  sheetRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#E8DCC4' },
   sheetRowText: { fontSize: 16, color: colors.ink },
   sheetRowTextActive: { fontWeight: '800', color: colors.marker },
   container: { flex: 1, backgroundColor: colors.tarp },
